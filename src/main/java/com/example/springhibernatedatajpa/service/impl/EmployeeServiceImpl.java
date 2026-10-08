@@ -26,6 +26,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public List<EmployeeDto> findAll() {
         List<Employee>  employees = employeeDao.getEmployees();
         List<EmployeeDto> employeeDtos = new ArrayList<>();
+
         for (Employee employee : employees) {
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setId(employee.getId());
@@ -36,10 +37,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
             employeeDto.setAge(employee.getAge());
             employeeDto.setPhoneNumber(employee.getPhoneNumber());
             employeeDto.setAvatarUrl(employee.getAvatar());
-            employeeDto.setDepartment(employee.getDepartment());
+
             if (employee.getDepartment() != null) {
                 employeeDto.setDepartmentId(employee.getDepartment().getId());
+                employeeDto.setDepartmentName(employee.getDepartment().getName());
             }
+
             employeeDtos.add(employeeDto);
         }
 
@@ -49,6 +52,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public EmployeeDto findById(UUID id) {
         Employee employee = employeeDao.getEmployee(id);
+
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(employee.getId());
         employeeDto.setFirstName(employee.getFirstName());
@@ -58,16 +62,19 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeDto.setAge(employee.getAge());
         employeeDto.setPhoneNumber(employee.getPhoneNumber());
         employeeDto.setAvatarUrl(employee.getAvatar());
-        employeeDto.setDepartment(employee.getDepartment());
+
         if (employee.getDepartment() != null) {
             employeeDto.setDepartmentId(employee.getDepartment().getId());
+            employeeDto.setDepartmentName(employee.getDepartment().getName());
         }
+
         return employeeDto;
     }
 
     @Override
     public void addEmployee(EmployeeDto employee) {
         Employee employeeEntity = new Employee();
+
         employeeEntity.setFirstName(employee.getFirstName());
         employeeEntity.setLastName(employee.getLastName());
         employeeEntity.setEmail(employee.getEmail());
@@ -75,6 +82,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setAge(employee.getAge());
         employeeEntity.setPhoneNumber(employee.getPhoneNumber());
         employeeEntity.setAvatar(employee.getAvatarUrl());
+
         if (employee.getDepartmentId() != null) {
             Department department = departmentDao.findById(employee.getDepartmentId());
             employeeEntity.setDepartment(department);
@@ -85,6 +93,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public void updateEmployee(EmployeeDto employee) {
         Employee employeeEntity = employeeDao.getEmployee(employee.getId());
+
         employeeEntity.setFirstName(employee.getFirstName());
         employeeEntity.setLastName(employee.getLastName());
         employeeEntity.setEmail(employee.getEmail());
@@ -92,6 +101,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setAge(employee.getAge());
         employeeEntity.setPhoneNumber(employee.getPhoneNumber());
         employeeEntity.setAvatar(employee.getAvatarUrl());
+
         if (employee.getDepartmentId() != null) {
             Department department = departmentDao.findById(employee.getDepartmentId());
             employeeEntity.setDepartment(department);

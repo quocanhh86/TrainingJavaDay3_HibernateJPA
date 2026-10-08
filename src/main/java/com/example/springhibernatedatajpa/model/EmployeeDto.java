@@ -45,6 +45,5 @@ public class EmployeeDto {
     @NotNull(message = "Vui lòng chọn phòng ban cho nhân viên")
     private UUID departmentId;
 
-    private Department department;
-
+    private String departmentName;
 }

@@ -54,7 +54,7 @@
                 <td th:text="${employee.phoneNumber}"></td>
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.address}"></td>
-                <td th:text="${employee.department?.name} ?: '-'"></td>
+                <td th:text="${employee.departmentName} != null ? ${employee.departmentName} : '-'"></td>
                 <td class="action-cell">
                     <div class="action-buttons">
                         <button type="button" class="btn-detail"

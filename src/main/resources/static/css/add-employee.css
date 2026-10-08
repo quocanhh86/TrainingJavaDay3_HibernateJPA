@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Add Employee Stylesheet (add-employee.html)
+   ========================================================================== */
+
+/* Page Header */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header .page-title {
+    margin-bottom: 0;
+}
+
+/* Back Link / Button */
+.btn-back {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.btn-back:hover {
+    background-color: #f1f5f9;
+    color: var(--primary-color);
+}
+
+/* Card Form Container */
+.card-add-employee {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* 2-Column Grid Layout for Form Rows */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Required Indicator */
+.required-mark {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* Validation Error Styles */
+.error-text {
+    color: var(--danger-color, #ef4444);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    display: block;
+    font-weight: 500;
+}
+
+.form-control.is-invalid {
+    border-color: var(--danger-color, #ef4444);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* Form Action Buttons */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.btn-cancel {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.5rem;
+    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-cancel:hover {
+    background-color: #f1f5f9;
+}

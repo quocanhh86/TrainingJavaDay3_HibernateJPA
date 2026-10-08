@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titlePage} ?: 'Quản lý nhân viên'">Quản lý nhân viên</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/home-employee.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title" th:text="#{employee.title}"></h1>
+        <a th:href="@{/employee/add}" class="btn-add">
+            <span class="btn-icon">+</span>
+            <span th:text="#{employee.add} ?: 'Thêm nhân viên'">Thêm nhân viên</span>
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Id</th>
+                <th th:text="#{employee.avatar}"></th>
+                <th th:text="#{employee.name}"></th>
+                <th th:text="#{employee.age}"></th>
+                <th th:text="#{employee.type}"></th>
+                <th th:text="#{employee.phone}"></th>
+                <th th:text="#{employee.email}"></th>
+                <th th:text="#{employee.address}"></th>
+                <th th:text="#{employee.department}"></th>
+                <th th:text="#{common.function}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee, index : ${employeeList}">
+                <td th:text="${index.count}"></td>
+                <td th:text="${employee.id}"></td>
+                <td>
+                    <img th:if="${employee.avatarUrl != null}" th:src="${employee.avatarUrl}" alt="Avatar" class="employee-avatar">
+                </td>
+                <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
+                <td th:text="${employee.age}"></td>
+                <td>
+                    <span class="badge badge-old" th:if="${employee.age &gt;= 45}" th:text="#{employee.old} ?: 'Lớn tuổi'"></span>
+                    <span class="badge badge-medium" th:if="${employee.age &lt; 45 and employee.age &gt;= 25}" th:text="#{employee.medium} ?: 'Trung niên'"></span>
+                    <span class="badge badge-young" th:if="${employee.age &lt; 25}" th:text="#{employee.young} ?: 'Trẻ'"></span>
+                </td>
+                <td th:text="${employee.phoneNumber}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.address}"></td>
+                <td th:text="${employee.department?.name} ?: '-'"></td>
+                <td class="action-cell">
+                    <div class="action-buttons">
+                        <button type="button" class="btn-detail"
+                                th:data-id="${employee.id}"
+                                th:data-firstname="${employee.firstName}"
+                                th:data-lastname="${employee.lastName}"
+                                th:data-age="${employee.age}"
+                                th:data-email="${employee.email}"
+                                th:data-phone="${employee.phoneNumber}"
+                                th:data-address="${employee.address}"
+                                th:data-avatar="${employee.avatarUrl}"
+                                onclick="openDetailModal(this)">
+                            Chi tiết
+                        </button>
+                        <button type="button" class="btn-edit"
+                                th:data-id="${employee.id}"
+                                th:data-firstname="${employee.firstName}"
+                                th:data-lastname="${employee.lastName}"
+                                th:data-age="${employee.age}"
+                                th:data-email="${employee.email}"
+                                th:data-phone="${employee.phoneNumber}"
+                                th:data-address="${employee.address}"
+                                th:data-avatar="${employee.avatarUrl}"
+                                onclick="openEditModal(this)">
+                            Sửa
+                        </button>
+                        <form th:action="@{/employee/remove/{id}(id=${employee.id})}" th:method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                            <button type="submit" th:text="#{employee.delete} ?: 'Xóa'" class="btn-delete"></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Employee Modal (Detail & Edit) -->
+    <div id="employeeModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTitle" class="modal-title">Chi tiết nhân viên</h3>
+                <button type="button" class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <!-- View Detail Section -->
+            <div id="employeeViewSection">
+                <div class="modal-body">
+                    <div class="modal-avatar-wrapper">
+                        <img id="viewAvatar" src="" alt="Avatar" class="modal-avatar">
+                        <h4 id="viewFullName" class="modal-user-name"></h4>
+                        <span id="viewBadge" class="badge"></span>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item full-width">
+                            <div class="info-label">Mã định danh (ID)</div>
+                            <div id="viewId" class="info-value info-value-id"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Họ & Tên đệm</div>
+                            <div id="viewFirstName" class="info-value"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Tên</div>
+                            <div id="viewLastName" class="info-value"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Tuổi</div>
+                            <div id="viewAge" class="info-value"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Số điện thoại</div>
+                            <div id="viewPhone" class="info-value"></div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">Email</div>
+                            <div id="viewEmail" class="info-value"></div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">Địa chỉ</div>
+                            <div id="viewAddress" class="info-value"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Đóng</button>
+                    <button type="button" class="btn-edit-mode" onclick="switchToEditMode()">Chỉnh sửa thông tin</button>
+                </div>
+            </div>
+
+            <!-- Edit Form Section -->
+            <div id="employeeEditSection">
+                <form th:action="@{/employee/update}" method="post">
+                    <input type="hidden" id="editId" name="id">
+
+                    <div class="modal-body">
+                        <div class="modal-form-grid">
+                            <div class="form-group">
+                                <label for="editFirstName" class="form-label">Họ & Tên đệm</label>
+                                <input type="text" id="editFirstName" name="firstName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLastName" class="form-label">Tên</label>
+                                <input type="text" id="editLastName" name="lastName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editAge" class="form-label">Tuổi</label>
+                                <input type="number" id="editAge" name="age" class="form-control" min="1" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhone" class="form-label">Số điện thoại</label>
+                                <input type="text" id="editPhone" name="phoneNumber" class="form-control">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" id="editEmail" name="email" class="form-control">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="editAddress" class="form-label">Địa chỉ</label>
+                                <input type="text" id="editAddress" name="address" class="form-control">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="editAvatarUrl" class="form-label">Ảnh đại diện (URL)</label>
+                                <input type="url" id="editAvatarUrl" name="avatarUrl" class="form-control" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="switchToViewMode()">Quay lại</button>
+                        <button type="submit" class="btn-submit">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/employee.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Fragment Footer -->
+<footer th:fragment="footer" class="site-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <div class="footer-logo">
+                <span class="logo-icon">🏢</span>
+                <span class="logo-text">EMS Portal</span>
+            </div>
+            <p class="footer-desc">Hệ thống quản lý nhân sự chuyên nghiệp, tiện lợi và hiện đại.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Liên kết nhanh</h4>
+            <ul>
+                <li><a th:href="@{/}">Trang chủ</a></li>
+                <li><a th:href="@{/employees}">Danh sách nhân viên</a></li>
+                <li><a href="#privacy">Chính sách bảo mật</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Liên hệ</h4>
+            <p>Hà Nội</p>
+            <p>support@company.com</p>
+            <p>📞 0987 654 321</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 EMS Portal. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

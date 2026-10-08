@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${titlePage} ?: 'Trang chủ'"></title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="main-content">
+  <h1 class="page-title">Chào mừng đến với hệ thống quản lý</h1>
+  <div class="card welcome-card">
+    <p class="welcome-desc">Hệ thống hỗ trợ quản lý danh sách nhân viên</p>
+    <a th:href="@{/employee}" th:text="${moveEmployeePage} ?: 'Xem danh sách nhân viên'" class="btn-action"></a>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

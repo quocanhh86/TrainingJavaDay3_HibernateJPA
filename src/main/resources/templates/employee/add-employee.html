@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{employee.add} ?: 'Thêm mới nhân viên'">Thêm mới nhân viên</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/add-employee.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title" th:text="#{employee.add} ?: 'Thêm mới nhân viên'"></h1>
+        <a th:href="@{/employee}" class="btn-back">
+            &larr; Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card card-add-employee">
+        <h3 class="card-title">Nhập thông tin nhân viên</h3>
+        <form th:action="@{/employee}" th:object="${employeeDto}" th:method="post" class="app-form" novalidate>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">Họ & Tên đệm <span class="required-mark">*</span></label>
+                    <input id="firstName" th:field="*{firstName}" type="text" class="form-control" th:errorclass="is-invalid" placeholder="Nhập họ và tên đệm...">
+                    <span class="error-text" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Tên <span class="required-mark">*</span></label>
+                    <input id="lastName" th:field="*{lastName}" type="text" class="form-control" th:errorclass="is-invalid" placeholder="Nhập tên...">
+                    <span class="error-text" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                </div>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label for="age" th:text="#{employee.age}" class="form-label">Tuổi <span class="required-mark">*</span></label>
+                    <input id="age" th:field="*{age}" type="number" class="form-control" th:errorclass="is-invalid" placeholder="Nhập độ tuổi...">
+                    <span class="error-text" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber" th:text="#{employee.phone}" class="form-label">Số điện thoại</label>
+                    <input id="phoneNumber" th:field="*{phoneNumber}" type="text" class="form-control" th:errorclass="is-invalid" placeholder="Nhập số điện thoại...">
+                    <span class="error-text" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" th:text="#{employee.email}" class="form-label">Email <span class="required-mark">*</span></label>
+                <input id="email" th:field="*{email}" type="email" class="form-control" th:errorclass="is-invalid" placeholder="Nhập địa chỉ email...">
+                <span class="error-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="address" th:text="#{employee.address}" class="form-label">Địa chỉ</label>
+                <input id="address" th:field="*{address}" type="text" class="form-control" placeholder="Nhập địa chỉ cư trú...">
+                <span class="error-text" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="avatarUrl" class="form-label">Ảnh đại diện (URL)</label>
+                <input id="avatarUrl" th:field="*{avatarUrl}" type="url" class="form-control" placeholder="https://...">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Tạo mới nhân viên</button>
+                <a th:href="@{/employee}" class="btn-cancel">Hủy bỏ</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

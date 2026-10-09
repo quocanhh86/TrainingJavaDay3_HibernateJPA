@@ -17,5 +17,6 @@ public class DepartmentDto {
 
     @NotBlank(message = "Tên phòng ban không được để trống")
     private String departmentName;
+
     private String description;
 }

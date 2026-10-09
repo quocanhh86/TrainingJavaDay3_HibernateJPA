@@ -65,6 +65,18 @@
                 <input id="avatarUrl" th:field="*{avatarUrl}" type="url" class="form-control" placeholder="https://...">
             </div>
 
+            <div class="form-group">
+                <label for="departmentId" class="form-label">Phòng ban <span class="required-mark">*</span></label>
+                <select id="departmentId" class="form-control" th:field="*{departmentId}" th:errorclass="is-invalid">
+                    <option value="">-- Chọn phòng ban --</option>
+                    <option th:each="department : ${departmentList}"
+                            th:value="${department.id}"
+                            th:text="${department.departmentName}">
+                    </option>
+                </select>
+                <span class="error-text" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></span>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn-submit">Tạo mới nhân viên</button>
                 <a th:href="@{/employee}" class="btn-cancel">Hủy bỏ</a>

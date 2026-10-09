@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class DepartmentDao implements IDepartmentDao {
+public class DepartmentDaoImpl implements IDepartmentDao {
     @PersistenceContext
     private EntityManager entityManager;
 

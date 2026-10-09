@@ -1,7 +1,9 @@
 package com.example.springhibernatedatajpa.controller;
 
 import com.example.springhibernatedatajpa.entity.Employee;
+import com.example.springhibernatedatajpa.model.DepartmentDto;
 import com.example.springhibernatedatajpa.model.EmployeeDto;
+import com.example.springhibernatedatajpa.service.IDepartmentService;
 import com.example.springhibernatedatajpa.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,17 +23,19 @@ import java.util.UUID;
 public class EmployeeController {
 
     private final IEmployeeService  employeeService;
+    private final IDepartmentService departmentService;
 
     @GetMapping()
     public String getAllEmployees(Model model) {
         List<EmployeeDto> employeeList = employeeService.findAll();
         model.addAttribute("employeeList", employeeList);
-        log.info("Employee list ", employeeList.size());
         return "employee/home-employee";
     }
 
     @GetMapping("/add")
-    public String showAddEmployeeForm(@ModelAttribute("employeeDto") EmployeeDto employeeDto) {
+    public String showAddEmployeeForm(@ModelAttribute("employeeDto") EmployeeDto employeeDto, Model model) {
+        List<DepartmentDto> departmentDtoList = departmentService.findAll();
+        model.addAttribute("departmentList", departmentDtoList);
         return "employee/add-employee";
     }
 

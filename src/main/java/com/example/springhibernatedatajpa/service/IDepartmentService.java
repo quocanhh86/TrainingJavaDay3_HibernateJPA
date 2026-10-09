@@ -11,4 +11,5 @@ public interface IDepartmentService {
     DepartmentDto findById(UUID id);
     void addDepartment(DepartmentDto departmentDto);
     void updateDepartment(DepartmentDto departmentDto);
+    void removeDepartment(UUID id);
 }

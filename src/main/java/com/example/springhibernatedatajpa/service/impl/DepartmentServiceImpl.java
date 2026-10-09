@@ -66,4 +66,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
         departmentDao.update(department);
     }
+
+    @Override
+    public void removeDepartment(UUID id) {
+        if(id != null)
+        {
+            departmentDao.delete(id);
+        }
+    }
 }

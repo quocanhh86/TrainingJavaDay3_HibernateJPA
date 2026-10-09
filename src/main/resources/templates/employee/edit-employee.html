@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{employee.add} ?: 'Thêm mới nhân viên'">Thêm mới nhân viên</title>
+    <title>Chỉnh sửa nhân viên</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/add-employee.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}">
 </head>
 <body>
 
@@ -13,16 +14,23 @@
 
 <main class="main-content">
     <div class="page-header">
-        <h1 class="page-title" th:text="#{employee.add} ?: 'Thêm mới nhân viên'"></h1>
+        <h1 class="page-title">Chỉnh sửa thông tin nhân viên</h1>
         <a th:href="@{/employee}" class="btn-back">
             &larr; Quay lại danh sách
         </a>
     </div>
 
     <div class="card card-add-employee">
-        <h3 class="card-title">Nhập thông tin nhân viên</h3>
-        <form th:action="@{/employee}" enctype="multipart/form-data" th:object="${employeeDto}" th:method="post" class="app-form" novalidate>
+        <h3 class="card-title">Cập nhật thông tin nhân viên</h3>
+        <form th:action="@{/employee/update}" enctype="multipart/form-data" th:object="${employeeDto}" th:method="post" class="app-form" novalidate>
+            <!-- ID ẩn của nhân viên -->
+            <input type="hidden" th:field="*{id}">
+            <!-- Lưu lại avatar hiện tại nếu không chọn ảnh mới -->
+            <input type="hidden" th:field="*{currentAvatar}">
+
+            <!-- Alert hiển thị lỗi nghiệp vụ từ Service nếu có -->
             <div th:replace="~{fragments/alert :: error-alert}"></div>
+
             <div class="form-grid-2">
                 <div class="form-group">
                     <label for="firstName" class="form-label">Họ & Tên đệm <span class="required-mark">*</span></label>
@@ -43,7 +51,7 @@
                     <span class="error-text" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
                 </div>
                 <div class="form-group">
-                    <label for="phoneNumber" th:text="#{employee.phone}" class="form-label">Số điện thoại<span class="required-mark">*</span></label>
+                    <label for="phoneNumber" th:text="#{employee.phone}" class="form-label">Số điện thoại <span class="required-mark">*</span></label>
                     <input id="phoneNumber" th:field="*{phoneNumber}" type="text" class="form-control" th:errorclass="is-invalid" placeholder="Nhập số điện thoại...">
                     <span class="error-text" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
                 </div>
@@ -57,13 +65,17 @@
 
             <div class="form-group">
                 <label for="address" th:text="#{employee.address}" class="form-label">Địa chỉ</label>
-                <input id="address" th:field="*{address}" type="text" class="form-control" placeholder="Nhập địa chỉ cư trú...">
+                <input id="address" th:field="*{address}" type="text" class="form-control" th:errorclass="is-invalid" placeholder="Nhập địa chỉ cư trú...">
                 <span class="error-text" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
 
             <div class="form-group">
-                <label for="avatar" class="form-label">Ảnh đại diện</label>
-                <input id="avatar" th:field="*{avatar}" type="file" class="form-control" placeholder="Chọn file">
+                <label class="form-label">Ảnh đại diện hiện tại</label>
+                <div style="margin-bottom: 8px;" th:if="*{currentAvatar != null and !currentAvatar.isEmpty()}">
+                    <img th:src="@{/img/{f}(f=*{currentAvatar})}" alt="Current Avatar" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb;">
+                </div>
+                <label for="avatar" class="form-label">Chọn ảnh mới (nếu muốn thay đổi)</label>
+                <input id="avatar" th:field="*{avatar}" type="file" class="form-control" accept="image/*">
             </div>
 
             <div class="form-group">
@@ -79,7 +91,7 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn-submit">Tạo mới nhân viên</button>
+                <button type="submit" class="btn-submit">Lưu thay đổi</button>
                 <a th:href="@{/employee}" class="btn-cancel">Hủy bỏ</a>
             </div>
         </form>

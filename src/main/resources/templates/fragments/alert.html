@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/alert.css}">
+<body>
+
+<div th:fragment="error-alert"
+     th:if="${businessError != null}"
+     class="alert-box alert-danger">
+    <span th:text="${businessError}"></span>
+</div>
+
+</body>
+</html>

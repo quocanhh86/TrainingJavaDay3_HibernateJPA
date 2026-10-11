@@ -1,0 +1,45 @@
+package com.example.springhibernatedatajpa.common;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.NoSuchElementException;
+
+@ControllerAdvice
+@Slf4j
+public class GlobalException {
+    @ExceptionHandler({
+            IllegalArgumentException.class,
+            IllegalStateException.class,
+            NoSuchElementException.class
+    })
+    public String handleBusinessException(RuntimeException ex,
+                                          HttpServletRequest request,
+                                          RedirectAttributes redirectAttributes) {
+        log.warn("Lỗi nghiệp vụ: {}", ex.getMessage());
+        redirectAttributes.addFlashAttribute("businessError", ex.getMessage());
+
+        String referer = request.getHeader("Referer");
+        if (referer != null && !referer.isBlank()) {
+            return "redirect:" + referer;
+        }
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGeneralException(Exception ex,
+                                         HttpServletRequest request,
+                                         RedirectAttributes redirectAttributes) {
+        log.error("Lỗi hệ thống chưa phân loại: ", ex);
+        redirectAttributes.addFlashAttribute("businessError", "Lỗi hệ thống: " + ex.getMessage());
+
+        String referer = request.getHeader("Referer");
+        if (referer != null && !referer.isBlank()) {
+            return "redirect:" + referer;
+        }
+        return "redirect:/";
+    }
+}

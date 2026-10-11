@@ -21,7 +21,7 @@
 
     <div class="card card-add-employee">
         <h3 class="card-title">Nhập thông tin nhân viên</h3>
-        <form th:action="@{/employee}" enctype="multipart/form-data" th:object="${employeeDto}" th:method="post" class="app-form" novalidate>
+        <form th:action="@{/employee}" enctype="multipart/form-data" th:object="${employeeRequest}" th:method="post" class="app-form" novalidate>
             <div th:replace="~{fragments/alert :: error-alert}"></div>
             <div class="form-grid-2">
                 <div class="form-group">

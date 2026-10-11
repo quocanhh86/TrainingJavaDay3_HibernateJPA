@@ -1,22 +1,17 @@
-package com.example.springhibernatedatajpa.model;
+package com.example.springhibernatedatajpa.model.response;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Builder
-public class DepartmentDto {
+public class DepartmentResponse {
     private UUID id;
-
-    @NotBlank(message = "Tên phòng ban không được để trống")
     private String departmentName;
-
     private String description;
 }

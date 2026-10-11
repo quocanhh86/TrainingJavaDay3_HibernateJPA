@@ -41,6 +41,6 @@ public class EmployeeRequest {
     private String currentAvatar;
     private MultipartFile avatar;
 
-    @NotNull(message = "Vui lòng chọn phòng ban cho nhân viên")
+//    @NotNull(message = "Vui lòng chọn phòng ban cho nhân viên")
     private UUID departmentId;
 }

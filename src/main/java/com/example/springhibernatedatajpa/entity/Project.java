@@ -1,5 +1,6 @@
 package com.example.springhibernatedatajpa.entity;
 
+import com.example.springhibernatedatajpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,12 +15,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "project")
-public class Project implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class Project  extends BaseEntity implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;

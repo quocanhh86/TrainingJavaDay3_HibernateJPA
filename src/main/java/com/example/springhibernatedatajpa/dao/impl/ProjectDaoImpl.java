@@ -17,7 +17,7 @@ public class ProjectDaoImpl implements IProjectDao {
 
     @Override
     public List<Project> findAll() {
-        String hql = "SELECT p FROM Project p LEFT JOIN FETCH p.department d";
+        String hql = "SELECT p FROM Project p LEFT JOIN FETCH p.department d order by p.createdAt";
         return entityManager.createQuery(hql, Project.class).getResultList();
     }
 

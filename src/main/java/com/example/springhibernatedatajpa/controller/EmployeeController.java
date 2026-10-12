@@ -30,14 +30,14 @@ public class EmployeeController {
     public String getAllEmployees(Model model) {
         List<EmployeeResponse> employeeList = employeeService.findAll();
         model.addAttribute("employeeList", employeeList);
-        return "employee/home-employee";
+        return "employee/home";
     }
 
     @GetMapping("/add")
     public String showAddEmployeeForm(@ModelAttribute("employeeRequest") EmployeeRequest employeeRequest, Model model) {
         List<DepartmentResponse> departmentDtoList = departmentService.findAll();
         model.addAttribute("departmentList", departmentDtoList);
-        return "employee/add-employee";
+        return "employee/add";
     }
 
     @GetMapping("/{id}")
@@ -46,7 +46,7 @@ public class EmployeeController {
         model.addAttribute("employeeList", employeeList);
         EmployeeResponse employeeResponse = employeeService.findById(id);
         model.addAttribute("employee", employeeResponse);
-        return "employee/home-employee";
+        return "employee/home";
     }
 
     @PostMapping()
@@ -55,7 +55,7 @@ public class EmployeeController {
         if (bindingResult.hasErrors()) {
             List<DepartmentResponse> departmentList = departmentService.findAll();
             model.addAttribute("departmentList", departmentList);
-            return "employee/add-employee";
+            return "employee/add";
         }
 
         employeeService.addEmployee(employeeRequest);
@@ -80,7 +80,7 @@ public class EmployeeController {
 
         model.addAttribute("employeeRequest", employeeRequest);
         model.addAttribute("departmentList", departmentList);
-        return "employee/edit-employee";
+        return "employee/edit";
 
     }
 
@@ -90,7 +90,7 @@ public class EmployeeController {
         {
             List<DepartmentResponse> departmentList = departmentService.findAll();
             model.addAttribute("departmentList", departmentList);
-            return "employee/edit-employee";
+            return "employee/edit";
         }
 
         employeeService.updateEmployee(employeeRequest);

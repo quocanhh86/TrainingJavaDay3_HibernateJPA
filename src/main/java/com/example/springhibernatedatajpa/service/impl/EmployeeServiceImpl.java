@@ -1,6 +1,7 @@
 package com.example.springhibernatedatajpa.service.impl;
 
 import com.example.springhibernatedatajpa.common.GlobalConfig;
+import com.example.springhibernatedatajpa.common.service.IFileService;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.entity.Department;
@@ -31,6 +32,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     private final IEmployeeDao employeeDao;
     private final IDepartmentDao departmentDao;
+    private final IFileService fileService;
 
     @Override
     public List<EmployeeResponse> findAll() {
@@ -66,7 +68,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setAge(employeeRequest.getAge());
         employeeEntity.setPhoneNumber(employeeRequest.getPhoneNumber());
 
-        String fileUrl = uploadFile(employeeRequest.getAvatar());
+        String fileUrl = fileService.uploadFile(employeeRequest.getAvatar(), "img");
         if (fileUrl != null) {
             employeeEntity.setAvatar(fileUrl);
         }
@@ -100,7 +102,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setAge(employeeRequest.getAge());
         employeeEntity.setPhoneNumber(employeeRequest.getPhoneNumber());
 
-        String fileUrl = uploadFile(employeeRequest.getAvatar());
+        String fileUrl = fileService.uploadFile(employeeRequest.getAvatar(), "img");
         if (fileUrl != null) {
             employeeEntity.setAvatar(fileUrl);
         } else {
@@ -131,28 +133,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
         }
 
         employeeDao.deleteEmployee(id);
-    }
-
-    public String uploadFile(MultipartFile file) throws IOException {
-        if (file != null && !file.isEmpty()) {
-            String ext = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
-            String fileName = UUID.randomUUID() + ext;
-            File uploadDir = new File(GlobalConfig.folderPath);
-
-            if (!Files.exists(uploadDir.toPath())) {
-                Files.createDirectories(uploadDir.toPath());
-            }
-
-            File destFile = new File(uploadDir.getAbsolutePath(), fileName);
-            try {
-                file.transferTo(destFile);
-                return fileName;
-            } catch (Exception ex) {
-                log.error("Lỗi upload file: ", ex);
-            }
-        }
-
-        return null;
     }
 
     public EmployeeResponse mapToResponse(Employee employee) {

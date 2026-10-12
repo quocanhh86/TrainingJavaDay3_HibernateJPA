@@ -4,48 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="#{department.add} ?: 'Thêm mới phòng ban'">Thêm mới phòng ban</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/add-employee.css}">
-    <link rel="stylesheet" th:href="@{/css/alert.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
+    <link rel="stylesheet" th:href="@{/css/department.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/alert.css}">
 </head>
 <body>
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-<main class="main-content">
-    <div class="page-header">
-        <h1 class="page-title" th:text="#{department.add} ?: 'Thêm mới phòng ban'">Thêm mới phòng ban</h1>
-        <a th:href="@{/department}" class="btn-back">
-            &larr; Quay lại danh sách
-        </a>
-    </div>
+<main class="dept-container">
+    <div class="dept-form-container">
+        <div>
+            <a th:href="@{/department}" class="btn-dept-back-link">
+                <span>&larr;</span>
+                <span>Quay lại danh sách</span>
+            </a>
+        </div>
 
-    <div class="card card-add-employee">
-        <h3 class="card-title">Nhập thông tin phòng ban</h3>
-        <form th:action="@{/department}" th:object="${departmentRequest}" th:method="post" class="app-form" novalidate>
-            <div th:replace="~{fragments/alert :: error-alert}"></div>
-
-            <div class="form-group">
-                <label for="departmentName" class="form-label">
-                    Tên phòng ban <span class="required-mark">*</span>
-                </label>
-                <input id="departmentName" th:field="*{departmentName}" type="text" class="form-control"
-                       th:errorclass="is-invalid" placeholder="Nhập tên phòng ban (ví dụ: Phòng Kế Toán, Phòng IT...)...">
-                <span class="error-text" th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}"></span>
+        <div class="dept-form-card">
+            <div class="dept-form-header-box">
+                <div class="dept-form-icon">🏢</div>
+                <div>
+                    <h2 class="dept-form-title" th:text="#{department.add} ?: 'Thêm mới phòng ban'">Thêm mới phòng ban</h2>
+                    <p class="dept-form-sub">Nhập thông tin chi tiết để tạo phòng ban mới trong tổ chức</p>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="description" class="form-label">Mô tả chức năng & nhiệm vụ</label>
-                <textarea id="description" th:field="*{description}" class="form-control" rows="4"
-                          placeholder="Nhập mô tả chi tiết về chức năng, vai trò của phòng ban..."></textarea>
-                <span class="error-text" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-            </div>
+            <form th:action="@{/department}" th:object="${departmentRequest}" th:method="post" novalidate>
+                <div th:replace="~{fragments/alert :: error-alert}"></div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn-submit">Tạo mới phòng ban</button>
-                <a th:href="@{/department}" class="btn-cancel">Hủy bỏ</a>
-            </div>
-        </form>
+                <div class="dept-form-group">
+                    <label for="departmentName" class="dept-label">
+                        <span th:text="#{department.name} ?: 'Tên phòng ban'">Tên phòng ban</span>
+                        <span class="dept-required">*</span>
+                    </label>
+                    <input id="departmentName" th:field="*{departmentName}" type="text"
+                           class="dept-input" th:errorclass="is-invalid"
+                           placeholder="Ví dụ: Phòng Kế Toán, Ban Công Nghệ, v.v...">
+                    <span class="dept-error-msg" th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}"></span>
+                </div>
+
+                <div class="dept-form-group">
+                    <label for="description" class="dept-label">
+                        <span th:text="#{department.description} ?: 'Mô tả & Chức năng nhiệm vụ'">Mô tả & Chức năng nhiệm vụ</span>
+                    </label>
+                    <textarea id="description" th:field="*{description}" rows="4"
+                              class="dept-textarea" th:errorclass="is-invalid"
+                              placeholder="Nhập mô tả về vai trò, mục tiêu và phạm vi hoạt động của phòng ban..."></textarea>
+                    <span class="dept-error-msg" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                </div>
+
+                <div class="dept-form-actions">
+                    <button type="submit" class="btn-dept-submit">
+                        <span>+</span>
+                        <span>Tạo phòng ban</span>
+                    </button>
+                    <a th:href="@{/department}" class="btn-dept-cancel">Hủy bỏ</a>
+                </div>
+            </form>
+        </div>
     </div>
 </main>
 

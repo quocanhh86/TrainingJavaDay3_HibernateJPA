@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -14,7 +18,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "employee")
-public class Employee  extends BaseEntity implements Serializable {
+public class Employee extends BaseEntity implements Serializable {
 
     @Column(name = "first_name")
     private String firstName;
@@ -41,7 +45,12 @@ public class Employee  extends BaseEntity implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Project> projects = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "teamLead", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Project> leadingProjects = new ArrayList<>();
 }

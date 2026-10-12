@@ -6,7 +6,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "project")
-public class Project  extends BaseEntity implements Serializable {
+public class Project extends BaseEntity implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -29,7 +30,23 @@ public class Project  extends BaseEntity implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "contract_url")
+    private String contractUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_lead_id")
+    private Employee teamLead;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "project_employee",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id")
+    )
+    @Builder.Default
+    private Set<Employee> employees = new HashSet<>();
 }

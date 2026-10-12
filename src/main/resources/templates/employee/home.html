@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${titlePage} ?: 'Quản lý nhân viên'">Quản lý nhân viên</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
     <link rel="stylesheet" th:href="@{/css/home-employee.css}">
     <link rel="stylesheet" th:href="@{/css/alert.css}">
 </head>
@@ -47,7 +47,7 @@
                 <td th:text="${employee.id}"></td>
                 <td>
                     <img th:if="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
-                         th:src="${#strings.startsWith(employee.avatarUrl, 'http') ? employee.avatarUrl : '/img/' + employee.avatarUrl}"
+                         th:src="${'/img/' + employee.avatarUrl}"
                          alt="Avatar" class="employee-avatar">
                 </td>
                 <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
@@ -91,7 +91,7 @@
             <div class="modal-body">
                 <div class="modal-avatar-wrapper">
                     <img th:if="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
-                         th:src="${#strings.startsWith(employee.avatarUrl, 'http') ? employee.avatarUrl : '/img/' + employee.avatarUrl}"
+                         th:src="${'/img/' + employee.avatarUrl}"
                          alt="Avatar" class="modal-avatar">
                     <div th:unless="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
                          class="modal-avatar" style="display: inline-flex; align-items: center; justify-content: center; background: #e0e7ff; color: #4338ca; font-size: 2rem; font-weight: bold;">

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Dự án - EMS Portal</title>
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
+    <link rel="stylesheet" th:href="@{/css/project.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/alert.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="prj-container">
+    <!-- Hero / Project Banner -->
+    <div class="prj-hero">
+        <div class="prj-hero-left">
+            <div class="prj-hero-icon">📁</div>
+            <div class="prj-hero-info">
+                <h1>Danh sách dự án</h1>
+                <p>Theo dõi tiến độ, phân bổ nhân sự, ngân sách và hợp đồng các dự án trong hệ thống</p>
+            </div>
+        </div>
+        <div class="prj-hero-actions">
+            <div class="prj-count-badge">
+                <span>Tổng số:</span>
+                <strong th:text="${projects != null ? projects.size() : 0}">0</strong>
+                <span>dự án</span>
+            </div>
+            <a th:href="@{/project/add}" class="btn-prj-add">
+                <span>+</span>
+                <span>Thêm dự án</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Alert thông báo lỗi nghiệp vụ nếu có -->
+    <div th:replace="~{fragments/alert :: error-alert}"></div>
+
+    <!-- Toolbar / Search Filter -->
+    <div class="prj-toolbar">
+        <div class="prj-search-box">
+            <span class="prj-search-icon">🔍</span>
+            <input type="text" id="prjSearchInput" class="prj-search-input"
+                   placeholder="Tìm kiếm dự án theo tên, phòng ban hoặc leader...">
+        </div>
+        <div class="prj-table-note">
+            <span>* Bấm vào nút <strong>Chi tiết</strong> để xem đầy đủ thông tin & thành viên dự án</span>
+        </div>
+    </div>
+
+    <!-- Project Table Card -->
+    <div class="prj-table-card">
+        <div class="prj-table-responsive">
+            <table class="prj-table">
+                <thead>
+                <tr>
+                    <th class="prj-col-stt">STT</th>
+                    <th>Tên dự án</th>
+                    <th>Phòng ban</th>
+                    <th>Trưởng dự án</th>
+                    <th>Ngân sách</th>
+                    <th>Thời gian thực hiện</th>
+                    <th>Hợp đồng</th>
+                    <th style="width: 140px; text-align: right;">Chức năng</th>
+                </tr>
+                </thead>
+                <tbody id="prjTableBody">
+                <tr class="prj-row" th:each="prj, index : ${projects}">
+                    <td class="prj-col-stt" th:text="${index.count}"></td>
+                    <td>
+                        <div class="prj-name-cell">
+                            <div class="prj-icon-box">🚀</div>
+                            <div>
+                                <div class="prj-name-title" th:text="${prj.name}">Tên dự án</div>
+                                <span class="prj-status-badge"
+                                      th:classappend="${prj.status != null && prj.status.name() == 'INACTIVE'} ? 'inactive' : 'active'"
+                                      th:text="${prj.status != null && prj.status.name() == 'INACTIVE' ? 'Tạm dừng / Đóng' : 'Đang triển khai'}">
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="prj-dept-tag"
+                              th:if="${prj.departmentName != null}"
+                              th:text="${prj.departmentName}">Phòng IT</span>
+                        <span th:unless="${prj.departmentName != null}" style="color: #94a3b8; font-style: italic;">Chưa gán</span>
+                    </td>
+                    <td>
+                        <div class="prj-leader-badge" th:if="${prj.teamLead != null}">
+                            <div class="prj-leader-avatar"
+                                 th:text="${#strings.substring(prj.teamLead.lastName != null ? prj.teamLead.lastName : 'L', 0, 1)}">L</div>
+                            <span th:text="${(prj.teamLead.lastName != null ? prj.teamLead.lastName : '') + ' ' + (prj.teamLead.firstName != null ? prj.teamLead.firstName : '')}">Nguyễn Văn A</span>
+                        </div>
+                        <span th:unless="${prj.teamLead != null}" style="color: #94a3b8; font-style: italic;">Chưa có</span>
+                    </td>
+                    <td>
+                        <span class="prj-budget-value"
+                              th:if="${prj.budget != null}"
+                              th:text="${#numbers.formatDecimal(prj.budget, 0, 'COMMA', 0, 'POINT') + ' ₫'}">100,000,000 ₫</span>
+                        <span th:unless="${prj.budget != null}" style="color: #94a3b8;">-</span>
+                    </td>
+                    <td>
+                        <div class="prj-date-range">
+                            <div><strong style="color: #0f172a;">BĐ:</strong> <span th:text="${prj.startDate != null ? #temporals.format(prj.startDate, 'dd/MM/yyyy') : '---'}">01/01/2026</span></div>
+                            <div><strong style="color: #0f172a;">KT:</strong> <span th:text="${prj.endDate != null ? #temporals.format(prj.endDate, 'dd/MM/yyyy') : '---'}">31/12/2026</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <a th:if="${prj.contractUrl != null and !#strings.isEmpty(prj.contractUrl)}"
+                           th:href="@{/project/contract/{fileName}(fileName=${prj.contractUrl})}"
+                           class="prj-contract-btn"
+                           title="Tải file hợp đồng">
+                            📄 <span>Tải file</span>
+                        </a>
+                        <span th:unless="${prj.contractUrl != null and !#strings.isEmpty(prj.contractUrl)}"
+                              style="color: #94a3b8; font-size: 0.825rem; font-style: italic;">
+                            Chưa có
+                        </span>
+                    </td>
+                    <td class="prj-actions-cell">
+                        <div class="prj-actions-group">
+                            <a th:href="@{/project/{id}(id=${prj.id})}"
+                               class="prj-btn prj-btn-detail">
+                                👁️ <span>Chi tiết</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${projects == null or projects.isEmpty()}">
+                    <td colspan="8">
+                        <div class="prj-empty-state">
+                            <div class="prj-empty-icon">📁</div>
+                            <div class="prj-empty-title">Chưa có dự án nào trong hệ thống</div>
+                            <p class="prj-empty-desc-p">Bắt đầu quản lý kế hoạch bằng cách tạo dự án đầu tiên.</p>
+                            <a th:href="@{/project/add}" class="btn-prj-add">+ Tạo dự án mới</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết dự án -->
+    <div id="projectModal" class="prj-modal-backdrop"
+         th:classappend="${project != null} ? 'active' : ''"
+         th:if="${project != null}">
+        <div class="prj-modal-card">
+            <div class="prj-modal-top">
+                <h3 class="prj-modal-top-title">
+                    <span>🚀</span>
+                    <span>Thông tin chi tiết dự án</span>
+                </h3>
+                <a th:href="@{/project}" class="prj-modal-close-btn" title="Đóng">&times;</a>
+            </div>
+
+            <div class="prj-modal-body">
+                <div class="prj-modal-header-hero">
+                    <div class="prj-modal-emblem">📁</div>
+                    <h3 class="prj-modal-h3" th:text="${project.name}">Tên dự án</h3>
+                    <span class="prj-status-badge"
+                          th:classappend="${project.status != null && project.status.name() == 'INACTIVE'} ? 'inactive' : 'active'"
+                          th:text="${project.status != null && project.status.name() == 'INACTIVE' ? 'Tạm dừng / Đã đóng' : 'Đang hoạt động'}">
+                    </span>
+                </div>
+
+                <div class="prj-grid-2">
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Mã dự án (ID)</div>
+                        <div class="prj-info-value mono" th:text="${project.id}"></div>
+                    </div>
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Phòng ban phụ trách</div>
+                        <div class="prj-info-value"
+                             th:text="${project.departmentName != null ? project.departmentName : 'Chưa phân bổ'}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prj-grid-2">
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Ngân sách dự án</div>
+                        <div class="prj-info-value prj-budget-value"
+                             th:text="${project.budget != null ? #numbers.formatDecimal(project.budget, 0, 'COMMA', 0, 'POINT') + ' ₫' : 'Chưa xác định'}">
+                        </div>
+                    </div>
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Hợp đồng đính kèm</div>
+                        <div class="prj-info-value">
+                            <a th:if="${project.contractUrl != null and !#strings.isEmpty(project.contractUrl)}"
+                               th:href="@{/project/contract/{fileName}(fileName=${project.contractUrl})}"
+                               class="prj-contract-btn" target="_blank">
+                                📥 Tải hợp đồng (<span th:text="${project.contractUrl}"></span>)
+                            </a>
+                            <span th:unless="${project.contractUrl != null and !#strings.isEmpty(project.contractUrl)}"
+                                  style="color: #94a3b8; font-style: italic; font-weight: normal; font-size: 0.85rem;">
+                                Chưa tải lên file hợp đồng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prj-grid-2">
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Ngày bắt đầu</div>
+                        <div class="prj-info-value"
+                             th:text="${project.startDate != null ? #temporals.format(project.startDate, 'dd/MM/yyyy') : 'Chưa xác định'}">
+                        </div>
+                    </div>
+                    <div class="prj-info-box">
+                        <div class="prj-info-label">Ngày kết thúc</div>
+                        <div class="prj-info-value"
+                             th:text="${project.endDate != null ? #temporals.format(project.endDate, 'dd/MM/yyyy') : 'Chưa xác định'}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leader Box -->
+                <div class="prj-info-box" style="margin-bottom: 1rem;">
+                    <div class="prj-info-label">Trưởng dự án (Leader)</div>
+                    <div th:if="${project.teamLead != null}" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.25rem;">
+                        <div class="prj-leader-avatar" style="width: 36px; height: 36px; font-size: 1rem;"
+                             th:text="${#strings.substring(project.teamLead.lastName != null ? project.teamLead.lastName : 'L', 0, 1)}">L</div>
+                        <div>
+                            <div style="font-weight: 700; color: #0f172a;"
+                                 th:text="${(project.teamLead.lastName != null ? project.teamLead.lastName : '') + ' ' + (project.teamLead.firstName != null ? project.teamLead.firstName : '')}">
+                            </div>
+                            <div style="font-size: 0.825rem; color: #64748b;">
+                                <span th:if="${project.teamLead.email != null}" th:text="${'📧 ' + project.teamLead.email}"></span>
+                                <span th:if="${project.teamLead.phoneNumber != null}" th:text="${' • 📞 ' + project.teamLead.phoneNumber}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:unless="${project.teamLead != null}" style="color: #94a3b8; font-style: italic; font-size: 0.9rem;">
+                        Chưa chỉ định trưởng dự án
+                    </div>
+                </div>
+
+                <!-- Members Box -->
+                <div class="prj-info-box">
+                    <div class="prj-info-label">
+                        <span>Thành viên tham gia</span>
+                        <span th:if="${project.employees != null}"
+                              th:text="${'(' + project.employees.size() + ' nhân sự)'}"
+                              style="font-size: 0.75rem; color: #0284c7;"></span>
+                    </div>
+                    <div class="prj-members-list" th:if="${project.employees != null and !project.employees.isEmpty()}">
+                        <div class="prj-member-chip" th:each="emp : ${project.employees}">
+                            <span>👤</span>
+                            <span th:text="${(emp.lastName != null ? emp.lastName : '') + ' ' + (emp.firstName != null ? emp.firstName : '')}"></span>
+                        </div>
+                    </div>
+                    <div th:unless="${project.employees != null and !project.employees.isEmpty()}"
+                         style="color: #94a3b8; font-style: italic; font-size: 0.85rem; margin-top: 0.25rem;">
+                        Chưa có nhân viên nào được phân công vào dự án này
+                    </div>
+                </div>
+            </div>
+
+            <div class="prj-modal-footer">
+                <a th:href="@{/project}" class="prj-modal-btn-close">Đóng</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/home-project.js}"></script>
+
+</body>
+</html>

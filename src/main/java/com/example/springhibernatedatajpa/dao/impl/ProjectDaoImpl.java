@@ -17,13 +17,25 @@ public class ProjectDaoImpl implements IProjectDao {
 
     @Override
     public List<Project> findAll() {
-        String hql = "SELECT p FROM Project p LEFT JOIN FETCH p.department d order by p.createdAt";
+        String hql = "SELECT DISTINCT p FROM Project p " +
+                "LEFT JOIN FETCH p.department d " +
+                "LEFT JOIN FETCH p.teamLead tl " +
+                "ORDER BY p.createdAt";
         return entityManager.createQuery(hql, Project.class).getResultList();
     }
 
     @Override
     public Project findById(UUID id) {
-        return entityManager.find(Project.class, id);
+        String hql = "SELECT DISTINCT p FROM Project p " +
+                "LEFT JOIN FETCH p.department d " +
+                "LEFT JOIN FETCH p.teamLead tl " +
+                "LEFT JOIN FETCH p.employees e " +
+                "WHERE p.id = :id";
+        List<Project> list = entityManager.createQuery(hql, Project.class)
+                .setParameter("id", id)
+                .setParameter("id", id)
+                .getResultList();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     @Override

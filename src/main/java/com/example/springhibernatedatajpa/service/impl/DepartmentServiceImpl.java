@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -41,7 +42,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
         Department department = departmentDao.findById(id);
         if (department == null) {
-            throw new java.util.NoSuchElementException("Không tìm thấy phòng ban với ID: " + id);
+            throw new NoSuchElementException("Không tìm thấy phòng ban với ID: " + id);
         }
         return mapToResponse(department);
     }
@@ -69,7 +70,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
         Department department = departmentDao.findById(departmentDto.getId());
         if (department == null) {
-            throw new java.util.NoSuchElementException("Không tìm thấy phòng ban cần cập nhật!");
+            throw new NoSuchElementException("Không tìm thấy phòng ban cần cập nhật!");
         }
         department.setName(departmentDto.getDepartmentName());
         if(departmentDto.getDescription() != null && !departmentDto.getDescription().isBlank())
@@ -88,7 +89,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
         Department department = departmentDao.findById(id);
         if (department == null) {
-            throw new java.util.NoSuchElementException("Phòng ban cần xóa không tồn tại!");
+            throw new NoSuchElementException("Phòng ban cần xóa không tồn tại!");
         }
         departmentDao.delete(id);
     }

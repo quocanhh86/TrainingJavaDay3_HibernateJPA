@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -77,13 +78,137 @@ public class DataInitializer implements CommandLineRunner {
             departmentDao.save(dept);
         }
 
-        // 2. Tạo 10 Projects (Dự án) - Tạo TRƯỚC Employee để có thể gán Project cho Employee
+        // 2. Tạo 10 Employees (Nhân viên)
+        Employee empAn = Employee.builder()
+                .firstName("Nguyễn Văn")
+                .lastName("An")
+                .age(28)
+                .email("an.nguyen@company.com")
+                .phoneNumber("0912345671")
+                .address("Hà Nội")
+                .avatar("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150")
+                .department(deptIT)
+                .build();
+
+        Employee empBich = Employee.builder()
+                .firstName("Trần Thị")
+                .lastName("Bích")
+                .age(25)
+                .email("bich.tran@company.com")
+                .phoneNumber("0912345672")
+                .address("Đà Nẵng")
+                .avatar("https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150")
+                .department(deptIT)
+                .build();
+
+        Employee empCuong = Employee.builder()
+                .firstName("Lê Hoàng")
+                .lastName("Cường")
+                .age(32)
+                .email("cuong.le@company.com")
+                .phoneNumber("0912345673")
+                .address("TP. Hồ Chí Minh")
+                .avatar("https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150")
+                .department(deptFinance)
+                .build();
+
+        Employee empDung = Employee.builder()
+                .firstName("Phạm Thị")
+                .lastName("Dung")
+                .age(29)
+                .email("dung.pham@company.com")
+                .phoneNumber("0912345674")
+                .address("Hải Phòng")
+                .avatar("https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150")
+                .department(deptFinance)
+                .build();
+
+        Employee empDuc = Employee.builder()
+                .firstName("Hoàng Minh")
+                .lastName("Đức")
+                .age(27)
+                .email("duc.hoang@company.com")
+                .phoneNumber("0912345675")
+                .address("Cần Thơ")
+                .avatar("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150")
+                .department(deptHR)
+                .build();
+
+        Employee empGiang = Employee.builder()
+                .firstName("Vũ Thị")
+                .lastName("Giang")
+                .age(24)
+                .email("giang.vu@company.com")
+                .phoneNumber("0912345676")
+                .address("Bắc Ninh")
+                .avatar("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150")
+                .department(deptHR)
+                .build();
+
+        Employee empHuy = Employee.builder()
+                .firstName("Đặng Quốc")
+                .lastName("Huy")
+                .age(35)
+                .email("huy.dang@company.com")
+                .phoneNumber("0912345677")
+                .address("Quảng Ninh")
+                .avatar("https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150")
+                .department(deptMarketing)
+                .build();
+
+        Employee empHang = Employee.builder()
+                .firstName("Bùi Thu")
+                .lastName("Hằng")
+                .age(26)
+                .email("hang.bui@company.com")
+                .phoneNumber("0912345678")
+                .address("Thừa Thiên Huế")
+                .avatar("https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150")
+                .department(deptMarketing)
+                .build();
+
+        Employee empKhai = Employee.builder()
+                .firstName("Ngô Quang")
+                .lastName("Khải")
+                .age(31)
+                .email("khai.ngo@company.com")
+                .phoneNumber("0912345679")
+                .address("Nghệ An")
+                .avatar("https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150")
+                .department(deptSales)
+                .build();
+
+        Employee empLinh = Employee.builder()
+                .firstName("Đỗ Mai")
+                .lastName("Linh")
+                .age(23)
+                .email("linh.do@company.com")
+                .phoneNumber("0912345680")
+                .address("Thanh Hóa")
+                .avatar("https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150")
+                .department(deptSales)
+                .build();
+
+        List<Employee> employees = Arrays.asList(
+                empAn, empBich, empCuong, empDung, empDuc,
+                empGiang, empHuy, empHang, empKhai, empLinh
+        );
+
+        for (Employee emp : employees) {
+            emp.setStatus(Status.ACTIVE);
+            employeeDao.addEmployee(emp);
+        }
+
+        // 3. Tạo 10 Projects (Dự án) - Gán Department, TeamLead và danh sách Employees
         Project prjERP = Project.builder()
                 .name("Hệ thống ERP Doanh Nghiệp")
                 .budget(500_000_000.0)
                 .startDate(LocalDate.of(2026, 1, 15))
                 .endDate(LocalDate.of(2026, 12, 31))
                 .department(deptIT)
+                .teamLead(empAn)
+                .employees(new HashSet<>(Arrays.asList(empAn, empBich)))
+                .contractUrl("hop_dong_erp.pdf")
                 .build();
         prjERP.setStatus(Status.ACTIVE);
 
@@ -93,6 +218,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 3, 1))
                 .endDate(LocalDate.of(2026, 9, 30))
                 .department(deptIT)
+                .teamLead(empBich)
+                .employees(new HashSet<>(Arrays.asList(empBich)))
+                .contractUrl("hop_dong_cloud.docx")
                 .build();
         prjCloud.setStatus(Status.ACTIVE);
 
@@ -102,6 +230,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 2, 10))
                 .endDate(LocalDate.of(2026, 8, 15))
                 .department(deptFinance)
+                .teamLead(empCuong)
+                .employees(new HashSet<>(Arrays.asList(empCuong, empDung)))
+                .contractUrl("hop_dong_tai_chinh.pdf")
                 .build();
         prjFinanceAuto.setStatus(Status.ACTIVE);
 
@@ -111,8 +242,11 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 4, 1))
                 .endDate(LocalDate.of(2026, 7, 31))
                 .department(deptFinance)
+                .teamLead(empDung)
+                .employees(new HashSet<>(Arrays.asList(empDung)))
+                .contractUrl("hop_dong_thue.docx")
                 .build();
-        prjTaxReport.setStatus(Status.INACTIVE); // Ví dụ dự án đã hoàn thành / đóng
+        prjTaxReport.setStatus(Status.INACTIVE);
 
         Project prjKPI = Project.builder()
                 .name("Hệ thống Quản lý Hiệu suất Nhân viên (KPIs)")
@@ -120,6 +254,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 1, 5))
                 .endDate(LocalDate.of(2026, 6, 30))
                 .department(deptHR)
+                .teamLead(empDuc)
+                .employees(new HashSet<>(Arrays.asList(empDuc, empGiang)))
+                .contractUrl("hop_dong_kpi.pdf")
                 .build();
         prjKPI.setStatus(Status.ACTIVE);
 
@@ -129,6 +266,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 5, 1))
                 .endDate(LocalDate.of(2026, 11, 30))
                 .department(deptHR)
+                .teamLead(empGiang)
+                .employees(new HashSet<>(Arrays.asList(empGiang)))
+                .contractUrl("hop_dong_dao_tao.pdf")
                 .build();
         prjTraining.setStatus(Status.ACTIVE);
 
@@ -138,6 +278,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 4, 15))
                 .endDate(LocalDate.of(2026, 8, 30))
                 .department(deptMarketing)
+                .teamLead(empHuy)
+                .employees(new HashSet<>(Arrays.asList(empHuy, empHang)))
+                .contractUrl("hop_dong_mua_he.pdf")
                 .build();
         prjSummerCampaign.setStatus(Status.ACTIVE);
 
@@ -147,6 +290,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 2, 1))
                 .endDate(LocalDate.of(2026, 12, 15))
                 .department(deptMarketing)
+                .teamLead(empHang)
+                .employees(new HashSet<>(Arrays.asList(empHang)))
+                .contractUrl("hop_dong_seo.docx")
                 .build();
         prjSEO.setStatus(Status.ACTIVE);
 
@@ -156,6 +302,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 3, 15))
                 .endDate(LocalDate.of(2026, 10, 31))
                 .department(deptSales)
+                .teamLead(empKhai)
+                .employees(new HashSet<>(Arrays.asList(empKhai, empLinh)))
+                .contractUrl("hop_dong_mien_trung.pdf")
                 .build();
         prjCentralMarket.setStatus(Status.ACTIVE);
 
@@ -165,6 +314,9 @@ public class DataInitializer implements CommandLineRunner {
                 .startDate(LocalDate.of(2026, 6, 1))
                 .endDate(LocalDate.of(2026, 12, 25))
                 .department(deptSales)
+                .teamLead(empLinh)
+                .employees(new HashSet<>(Arrays.asList(empLinh)))
+                .contractUrl("hop_dong_vip.pdf")
                 .build();
         prjVIP.setStatus(Status.ACTIVE);
 
@@ -178,125 +330,6 @@ public class DataInitializer implements CommandLineRunner {
             projectDao.add(prj);
         }
 
-        // 3. Tạo 10 Employees (Nhân viên) - Liên kết cả Department VÀ Project tương ứng
-        List<Employee> employees = Arrays.asList(
-                Employee.builder()
-                        .firstName("Nguyễn Văn")
-                        .lastName("An")
-                        .age(28)
-                        .email("an.nguyen@company.com")
-                        .phoneNumber("0912345671")
-                        .address("Hà Nội")
-                        .avatar("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150")
-                        .department(deptIT)
-                        .project(prjERP) // Đã liên kết với dự án ERP
-                        .build(),
-                Employee.builder()
-                        .firstName("Trần Thị")
-                        .lastName("Bích")
-                        .age(25)
-                        .email("bich.tran@company.com")
-                        .phoneNumber("0912345672")
-                        .address("Đà Nẵng")
-                        .avatar("https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150")
-                        .department(deptIT)
-                        .project(prjCloud) // Đã liên kết với dự án Cloud
-                        .build(),
-                Employee.builder()
-                        .firstName("Lê Hoàng")
-                        .lastName("Cường")
-                        .age(32)
-                        .email("cuong.le@company.com")
-                        .phoneNumber("0912345673")
-                        .address("TP. Hồ Chí Minh")
-                        .avatar("https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150")
-                        .department(deptFinance)
-                        .project(prjFinanceAuto) // Đã liên kết với dự án Tài chính tự động
-                        .build(),
-                Employee.builder()
-                        .firstName("Phạm Thị")
-                        .lastName("Dung")
-                        .age(29)
-                        .email("dung.pham@company.com")
-                        .phoneNumber("0912345674")
-                        .address("Hải Phòng")
-                        .avatar("https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150")
-                        .department(deptFinance)
-                        .project(prjTaxReport) // Đã liên kết với dự án Quyết toán thuế
-                        .build(),
-                Employee.builder()
-                        .firstName("Hoàng Minh")
-                        .lastName("Đức")
-                        .age(27)
-                        .email("duc.hoang@company.com")
-                        .phoneNumber("0912345675")
-                        .address("Cần Thơ")
-                        .avatar("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150")
-                        .department(deptHR)
-                        .project(prjKPI) // Đã liên kết với dự án KPI
-                        .build(),
-                Employee.builder()
-                        .firstName("Vũ Thị")
-                        .lastName("Giang")
-                        .age(24)
-                        .email("giang.vu@company.com")
-                        .phoneNumber("0912345676")
-                        .address("Bắc Ninh")
-                        .avatar("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150")
-                        .department(deptHR)
-                        .project(prjTraining) // Đã liên kết với dự án Đào tạo
-                        .build(),
-                Employee.builder()
-                        .firstName("Đặng Quốc")
-                        .lastName("Huy")
-                        .age(35)
-                        .email("huy.dang@company.com")
-                        .phoneNumber("0912345677")
-                        .address("Quảng Ninh")
-                        .avatar("https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150")
-                        .department(deptMarketing)
-                        .project(prjSummerCampaign) // Đã liên kết với dự án Mùa hè
-                        .build(),
-                Employee.builder()
-                        .firstName("Bùi Thu")
-                        .lastName("Hằng")
-                        .age(26)
-                        .email("hang.bui@company.com")
-                        .phoneNumber("0912345678")
-                        .address("Thừa Thiên Huế")
-                        .avatar("https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150")
-                        .department(deptMarketing)
-                        .project(prjSEO) // Đã liên kết với dự án SEO
-                        .build(),
-                Employee.builder()
-                        .firstName("Ngô Quang")
-                        .lastName("Khải")
-                        .age(31)
-                        .email("khai.ngo@company.com")
-                        .phoneNumber("0912345679")
-                        .address("Nghệ An")
-                        .avatar("https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150")
-                        .department(deptSales)
-                        .project(prjCentralMarket) // Đã liên kết với dự án Miền Trung
-                        .build(),
-                Employee.builder()
-                        .firstName("Đỗ Mai")
-                        .lastName("Linh")
-                        .age(23)
-                        .email("linh.do@company.com")
-                        .phoneNumber("0912345680")
-                        .address("Thanh Hóa")
-                        .avatar("https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150")
-                        .department(deptSales)
-                        .project(prjVIP) // Đã liên kết với dự án Khách hàng VIP
-                        .build()
-        );
-
-        for (Employee emp : employees) {
-            emp.setStatus(Status.ACTIVE);
-            employeeDao.addEmployee(emp);
-        }
-
-        log.info("Khởi tạo dữ liệu mẫu thành công: 5 Departments, 10 Projects, 10 Employees (đầy đủ quan hệ liên kết và Status).");
+        log.info("Khởi tạo dữ liệu mẫu thành công: 5 Departments, 10 Employees, 10 Projects (đầy đủ quan hệ liên kết TeamLead, Employees, Department, Contract và Status).");
     }
 }

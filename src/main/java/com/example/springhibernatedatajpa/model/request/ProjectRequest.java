@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -32,4 +33,10 @@ public class ProjectRequest {
 
     @NotBlank(message = "Vui lòng chọn dự án thuộc phòng ban nào")
     private UUID departmentId;
+
+    private MultipartFile contractFile;
+    private String contractUrl;
+
+    private UUID teamLeaderId;
+
 }

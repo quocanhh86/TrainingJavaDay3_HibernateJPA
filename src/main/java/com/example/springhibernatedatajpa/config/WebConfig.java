@@ -1,5 +1,6 @@
 package com.example.springhibernatedatajpa.config;
 
+import com.example.springhibernatedatajpa.common.GlobalConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,11 +13,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Path uploadDir = Paths.get("src/main/resources/static/img");
+        Path uploadDir = Paths.get(GlobalConfig.folderPath);
         String uploadPath = uploadDir.toFile().getAbsolutePath();
 
         registry.addResourceHandler("/img/**")
-                .addResourceLocations("file: " + uploadPath + "/", "classpath:/static/img/");
-        WebMvcConfigurer.super.addResourceHandlers(registry);
+                .addResourceLocations("file:" + uploadPath + "/", "classpath:/static/img/");
     }
 }

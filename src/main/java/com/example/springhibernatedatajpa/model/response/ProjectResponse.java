@@ -1,10 +1,18 @@
 package com.example.springhibernatedatajpa.model.response;
 
-import jakarta.validation.constraints.*;
+import com.example.springhibernatedatajpa.common.enums.Status;
+import com.example.springhibernatedatajpa.entity.Employee;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class ProjectResponse {
     private UUID id;
     private String name;
@@ -13,4 +21,8 @@ public class ProjectResponse {
     private LocalDate endDate;
     private UUID departmentId;
     private String departmentName;
+    private String contractUrl;
+    private Employee teamLead;
+    private Status status;
+    private Set<Employee> employees;
 }

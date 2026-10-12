@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo phân công dự án</title>
+</head>
+<body>
+
+<!-- Fragment thông báo phân công dự án cho Leader -->
+<div th:fragment="project-assigned-email"
+     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px 10px; color: #333333;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #e5e7eb;">
+        <!-- Header -->
+        <tr>
+            <td style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; padding: 24px; text-align: center;">
+                <h1 style="margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.5px; color: #ffffff;">THÔNG BÁO PHÂN CÔNG QUẢN TRỊ DỰ ÁN</h1>
+            </td>
+        </tr>
+        <!-- Content -->
+        <tr>
+            <td style="padding: 30px 25px; line-height: 1.6;">
+                <p style="font-size: 16px; margin: 0 0 16px 0;">Xin chào <strong th:text="${leaderName} ?: 'Trưởng dự án'">Nguyễn Văn A</strong>,</p>
+                <p style="margin: 0 0 16px 0;">Bạn đã được phân công làm <strong>Trưởng dự án (Leader)</strong> cho dự án mới trong hệ thống. Dưới đây là thông tin chi tiết về dự án:</p>
+
+                <!-- Project Info Table -->
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin: 20px 0; background-color: #fafafa; border-radius: 6px; overflow: hidden; border: 1px solid #e5e7eb;">
+                    <tr>
+                        <th style="width: 35%; padding: 12px 16px; text-align: left; background-color: #f3f4f6; color: #4b5563; font-weight: 600; font-size: 14px; border-bottom: 1px solid #e5e7eb;">Tên dự án</th>
+                        <td style="padding: 12px 16px; color: #111827; font-size: 14px; border-bottom: 1px solid #e5e7eb;"><strong th:text="${projectName} ?: 'N/A'">ERP System</strong></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 12px 16px; text-align: left; background-color: #f3f4f6; color: #4b5563; font-weight: 600; font-size: 14px; border-bottom: 1px solid #e5e7eb;">Phòng ban</th>
+                        <td style="padding: 12px 16px; color: #111827; font-size: 14px; border-bottom: 1px solid #e5e7eb;" th:text="${departmentName} ?: 'N/A'">Phòng Công nghệ Thông tin</td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 12px 16px; text-align: left; background-color: #f3f4f6; color: #4b5563; font-weight: 600; font-size: 14px; border-bottom: 1px solid #e5e7eb;">Ngày bắt đầu</th>
+                        <td style="padding: 12px 16px; color: #111827; font-size: 14px; border-bottom: 1px solid #e5e7eb;" th:text="${startDate} ?: 'N/A'">01/10/2026</td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 12px 16px; text-align: left; background-color: #f3f4f6; color: #4b5563; font-weight: 600; font-size: 14px; border-bottom: 1px solid #e5e7eb;">Ngày kết thúc</th>
+                        <td style="padding: 12px 16px; color: #111827; font-size: 14px; border-bottom: 1px solid #e5e7eb;" th:text="${endDate} ?: 'N/A'">31/12/2026</td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 12px 16px; text-align: left; background-color: #f3f4f6; color: #4b5563; font-weight: 600; font-size: 14px;">Ngân sách</th>
+                        <td style="padding: 12px 16px; color: #111827; font-size: 14px;" th:text="${budget} ?: 'N/A'">100,000,000 VND</td>
+                    </tr>
+                </table>
+
+                <!-- Highlight Box -->
+                <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 20px 0; border-radius: 0 4px 4px 0; font-size: 14px; color: #1e40af;">
+                    Vui lòng truy cập hệ thống để kiểm tra danh sách thành viên dự án và tiến hành lập kế hoạch triển khai công việc.
+                </div>
+
+                <!-- CTA Button -->
+                <div style="text-align: center; margin: 30px 0 20px 0;">
+                    <a th:href="${detailUrl} ?: '#'" target="_blank"
+                       style="display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 12px 28px; font-weight: 600; font-size: 14px; border-radius: 6px;">
+                        Xem Chi Tiết Dự Án
+                    </a>
+                </div>
+
+                <p style="margin: 20px 0 6px 0; font-size: 14px;">Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ thêm, vui lòng liên hệ với Ban Quản lý.</p>
+                <p style="margin: 0; font-size: 14px;">Trân trọng,<br><strong>Ban Quản Trị Hệ Thống</strong></p>
+            </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+            <td style="background-color: #f9fafb; padding: 20px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb;">
+                <p style="margin: 0;">Đây là email thông báo tự động từ Hệ thống Quản trị. Vui lòng không phản hồi trực tiếp email này.</p>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

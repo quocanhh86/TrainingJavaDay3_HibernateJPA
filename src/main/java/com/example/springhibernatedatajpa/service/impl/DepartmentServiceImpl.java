@@ -2,7 +2,8 @@ package com.example.springhibernatedatajpa.service.impl;
 
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.entity.Department;
-import com.example.springhibernatedatajpa.model.DepartmentDto;
+import com.example.springhibernatedatajpa.model.request.DepartmentRequest;
+import com.example.springhibernatedatajpa.model.response.DepartmentResponse;
 import com.example.springhibernatedatajpa.service.IDepartmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,34 +21,41 @@ public class DepartmentServiceImpl implements IDepartmentService {
     private final IDepartmentDao departmentDao;
 
     @Override
-    public List<DepartmentDto> findAll() {
+    public List<DepartmentResponse> findAll() {
         List<Department> departments = departmentDao.findAll();
-        List<DepartmentDto> departmentDtos = new ArrayList<>();
+        List<DepartmentResponse> departmentDtos = new ArrayList<>();
 
         for(Department department : departments)
         {
-            DepartmentDto departmentDto = new DepartmentDto();
-            departmentDto.setDepartmentName(department.getName());
-            departmentDto.setId(department.getId());
-            departmentDto.setDescription(department.getDescription());
-            departmentDtos.add(departmentDto);
+            DepartmentResponse departmentResponse = mapToResponse(department);
+            departmentDtos.add(departmentResponse);
         }
 
         return departmentDtos;
     }
 
     @Override
-    public DepartmentDto findById(UUID id) {
-        return null;
+    public DepartmentResponse findById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Mã phòng ban (ID) không được để trống!");
+        }
+        Department department = departmentDao.findById(id);
+        if (department == null) {
+            throw new java.util.NoSuchElementException("Không tìm thấy phòng ban với ID: " + id);
+        }
+        return mapToResponse(department);
     }
 
     @Override
-    public void addDepartment(DepartmentDto departmentDto) {
+    public void addDepartment(DepartmentRequest departmentRequest) {
+        if (departmentRequest == null || departmentRequest.getDepartmentName() == null || departmentRequest.getDepartmentName().isBlank()) {
+            throw new IllegalArgumentException("Tên phòng ban không được để trống!");
+        }
         Department department = new Department();
-        department.setName(departmentDto.getDepartmentName());
-        if(departmentDto.getDescription() != null && !departmentDto.getDescription().isBlank())
+        department.setName(departmentRequest.getDepartmentName());
+        if(departmentRequest.getDescription() != null && !departmentRequest.getDescription().isBlank())
         {
-            department.setDescription(departmentDto.getDescription());
+            department.setDescription(departmentRequest.getDescription());
 
         }
 
@@ -55,8 +63,14 @@ public class DepartmentServiceImpl implements IDepartmentService {
     }
 
     @Override
-    public void updateDepartment(DepartmentDto departmentDto) {
+    public void updateDepartment(DepartmentRequest departmentDto) {
+        if (departmentDto == null || departmentDto.getId() == null) {
+            throw new IllegalArgumentException("Mã phòng ban không hợp lệ!");
+        }
         Department department = departmentDao.findById(departmentDto.getId());
+        if (department == null) {
+            throw new java.util.NoSuchElementException("Không tìm thấy phòng ban cần cập nhật!");
+        }
         department.setName(departmentDto.getDepartmentName());
         if(departmentDto.getDescription() != null && !departmentDto.getDescription().isBlank())
         {
@@ -69,9 +83,22 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     @Override
     public void removeDepartment(UUID id) {
-        if(id != null)
-        {
-            departmentDao.delete(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Mã phòng ban (ID) không được để trống!");
         }
+        Department department = departmentDao.findById(id);
+        if (department == null) {
+            throw new java.util.NoSuchElementException("Phòng ban cần xóa không tồn tại!");
+        }
+        departmentDao.delete(id);
+    }
+
+    private DepartmentResponse mapToResponse(Department department)
+    {
+        DepartmentResponse departmentResponse = new DepartmentResponse();
+        departmentResponse.setDepartmentName(department.getName());
+        departmentResponse.setId(department.getId());
+        departmentResponse.setDescription(department.getDescription());
+        return departmentResponse;
     }
 }

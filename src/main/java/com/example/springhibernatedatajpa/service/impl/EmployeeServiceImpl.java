@@ -1,10 +1,10 @@
 package com.example.springhibernatedatajpa.service.impl;
 
+import com.example.springhibernatedatajpa.common.GlobalConfig;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.entity.Department;
 import com.example.springhibernatedatajpa.entity.Employee;
-import com.example.springhibernatedatajpa.model.EmployeeDto;
 import com.example.springhibernatedatajpa.model.request.EmployeeRequest;
 import com.example.springhibernatedatajpa.model.response.EmployeeResponse;
 import com.example.springhibernatedatajpa.service.IEmployeeService;
@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,7 +37,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
         List<Employee> employeesList = employeeDao.getEmployees();
         List<EmployeeResponse> employeeResponsesList = new ArrayList<>();
         for (Employee employee : employeesList) {
-            log.info(employee.getAvatar());
             employeeResponsesList.add(mapToResponse(employee));
         }
 
@@ -43,14 +45,20 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public EmployeeResponse findById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Mã nhân viên (ID) không được để trống!");
+        }
+
         Employee employee = employeeDao.getEmployee(id);
+        if (employee == null) {
+            throw new NoSuchElementException("Không tìm thấy nhân viên với ID: " + id);
+        }
         return mapToResponse(employee);
     }
 
     @Override
-    public void addEmployee(EmployeeRequest employeeRequest) {
+    public void addEmployee(EmployeeRequest employeeRequest) throws IOException {
         Employee employeeEntity = new Employee();
-
         employeeEntity.setFirstName(employeeRequest.getFirstName());
         employeeEntity.setLastName(employeeRequest.getLastName());
         employeeEntity.setEmail(employeeRequest.getEmail());
@@ -59,20 +67,31 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setPhoneNumber(employeeRequest.getPhoneNumber());
 
         String fileUrl = uploadFile(employeeRequest.getAvatar());
-        if(fileUrl != null) {
+        if (fileUrl != null) {
             employeeEntity.setAvatar(fileUrl);
         }
 
         if (employeeRequest.getDepartmentId() != null) {
             Department department = departmentDao.findById(employeeRequest.getDepartmentId());
+            if (department == null) {
+                throw new NoSuchElementException("Phòng ban đã chọn không tồn tại!");
+            }
             employeeEntity.setDepartment(department);
         }
+
         employeeDao.addEmployee(employeeEntity);
     }
 
     @Override
-    public void updateEmployee(EmployeeRequest employeeRequest) {
+    public void updateEmployee(EmployeeRequest employeeRequest) throws IOException {
+        if (employeeRequest.getId() == null) {
+            throw new IllegalArgumentException("ID nhân viên cần cập nhật không hợp lệ!");
+        }
+
         Employee employeeEntity = employeeDao.getEmployee(employeeRequest.getId());
+        if (employeeEntity == null) {
+            throw new NoSuchElementException("Không tìm thấy nhân viên cần cập nhật!");
+        }
 
         employeeEntity.setFirstName(employeeRequest.getFirstName());
         employeeEntity.setLastName(employeeRequest.getLastName());
@@ -82,16 +101,17 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setPhoneNumber(employeeRequest.getPhoneNumber());
 
         String fileUrl = uploadFile(employeeRequest.getAvatar());
-        if(fileUrl != null) {
+        if (fileUrl != null) {
             employeeEntity.setAvatar(fileUrl);
-        }
-        else
-        {
+        } else {
             employeeEntity.setAvatar(employeeRequest.getCurrentAvatar());
         }
 
         if (employeeRequest.getDepartmentId() != null) {
             Department department = departmentDao.findById(employeeRequest.getDepartmentId());
+            if (department == null) {
+                throw new NoSuchElementException("Phòng ban đã chọn không tồn tại!");
+            }
             employeeEntity.setDepartment(department);
         } else {
             employeeEntity.setDepartment(null);
@@ -101,20 +121,34 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public void deleteById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Mã nhân viên (ID) không được để trống!");
+        }
+
+        Employee employee = employeeDao.getEmployee(id);
+        if (employee == null) {
+            throw new NoSuchElementException("Nhân viên cần xóa không tồn tại!");
+        }
+
         employeeDao.deleteEmployee(id);
     }
 
-    public String uploadFile(MultipartFile file) {
-        if (!file.isEmpty()) {
-            String ext =  Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
+    public String uploadFile(MultipartFile file) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String ext = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
             String fileName = UUID.randomUUID() + ext;
-            File uploadDir = new File("src/main/resources/static/img");
-            File destFile = new File(uploadDir, fileName);
+            File uploadDir = new File(GlobalConfig.folderPath);
+
+            if (!Files.exists(uploadDir.toPath())) {
+                Files.createDirectories(uploadDir.toPath());
+            }
+
+            File destFile = new File(uploadDir.getAbsolutePath(), fileName);
             try {
                 file.transferTo(destFile);
                 return fileName;
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.error("Lỗi upload file: ", ex);
             }
         }
 

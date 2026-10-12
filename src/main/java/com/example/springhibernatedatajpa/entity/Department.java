@@ -1,9 +1,11 @@
 package com.example.springhibernatedatajpa.entity;
 
+import com.example.springhibernatedatajpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,12 +17,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "department")
-public class Department implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class Department extends BaseEntity implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;

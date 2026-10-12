@@ -46,7 +46,9 @@
                 <td th:text="${index.count}"></td>
                 <td th:text="${employee.id}"></td>
                 <td>
-                    <img th:if="${employee.avatarUrl != null}" th:src="@{/img/{f}(f=${employee.avatarUrl})}" alt="Avatar" class="employee-avatar">
+                    <img th:if="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
+                         th:src="${#strings.startsWith(employee.avatarUrl, 'http') ? employee.avatarUrl : '/img/' + employee.avatarUrl}"
+                         alt="Avatar" class="employee-avatar">
                 </td>
                 <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
                 <td th:text="${employee.age}"></td>
@@ -61,6 +63,7 @@
                 <td th:text="${employee.departmentName != null ? employee.departmentName : '-'}"></td>
                 <td class="action-cell">
                     <div class="action-buttons">
+                        <a th:href="@{/employee/{id}(id=${employee.id})}" class="btn-detail" th:text="#{employee.detail} ?: 'Chi tiết'">Chi tiết</a>
                         <a th:href="@{/employee/edit/{id}(id=${employee.id})}" class="btn-edit" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                             Sửa
                         </a>
@@ -76,9 +79,80 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Modal Chi tiết nhân viên -->
+    <div id="employeeModal" class="modal-backdrop" th:classappend="${employee != null} ? 'active' : ''" th:if="${employee != null}">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" th:text="#{employee.detail} ?: 'Chi tiết nhân viên'">Chi tiết nhân viên</h3>
+                <a th:href="@{/employee}" class="modal-close" style="text-decoration: none;" title="Đóng">&times;</a>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-avatar-wrapper">
+                    <img th:if="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
+                         th:src="${#strings.startsWith(employee.avatarUrl, 'http') ? employee.avatarUrl : '/img/' + employee.avatarUrl}"
+                         alt="Avatar" class="modal-avatar">
+                    <div th:unless="${employee.avatarUrl != null and !#strings.isEmpty(employee.avatarUrl)}"
+                         class="modal-avatar" style="display: inline-flex; align-items: center; justify-content: center; background: #e0e7ff; color: #4338ca; font-size: 2rem; font-weight: bold;">
+                        <span th:text="${#strings.substring(employee.firstName, 0, 1)}"></span>
+                    </div>
+
+                    <h4 class="modal-user-name" th:text="${employee.firstName + ' ' + employee.lastName}"></h4>
+                    <div>
+                        <span class="badge badge-old" th:if="${employee.age >= 45}" th:text="#{employee.old} ?: 'Lớn tuổi'"></span>
+                        <span class="badge badge-medium" th:if="${employee.age < 45 and employee.age >= 25}" th:text="#{employee.medium} ?: 'Trung niên'"></span>
+                        <span class="badge badge-young" th:if="${employee.age < 25}" th:text="#{employee.young} ?: 'Trẻ'"></span>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item full-width">
+                        <div class="info-label">Mã định danh (ID)</div>
+                        <div class="info-value info-value-id" th:text="${employee.id}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Họ & Tên đệm</div>
+                        <div class="info-value" th:text="${employee.firstName}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tên</div>
+                        <div class="info-value" th:text="${employee.lastName}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" th:text="#{employee.age}">Tuổi</div>
+                        <div class="info-value" th:text="${employee.age}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" th:text="#{employee.phone}">Số điện thoại</div>
+                        <div class="info-value" th:text="${employee.phoneNumber != null ? employee.phoneNumber : '-'}"></div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-label" th:text="#{employee.email}">Email</div>
+                        <div class="info-value" th:text="${employee.email != null ? employee.email : '-'}"></div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-label" th:text="#{employee.department}">Phòng ban</div>
+                        <div class="info-value" th:text="${employee.departmentName != null ? employee.departmentName : '-'}"></div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-label" th:text="#{employee.address}">Địa chỉ</div>
+                        <div class="info-value" th:text="${employee.address != null ? employee.address : '-'}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a th:href="@{/employee}" class="btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center;">Đóng</a>
+                <a th:href="@{/employee/edit/{id}(id=${employee.id})}" class="btn-edit-mode" style="text-decoration: none; display: inline-flex; align-items: center;">Chỉnh sửa thông tin</a>
+            </div>
+        </div>
+    </div>
 </main>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/home-employee.js}"></script>
 
 </body>
 </html>

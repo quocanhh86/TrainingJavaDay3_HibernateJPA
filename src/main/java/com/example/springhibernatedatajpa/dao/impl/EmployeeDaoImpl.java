@@ -16,7 +16,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public List<Employee> getEmployees() {
-        String hql = "SELECT e FROM Employee e LEFT JOIN FETCH e.department d";
+        String hql = "SELECT e FROM Employee e LEFT JOIN FETCH e.department d ORDER BY e.age";
         return entityManager.createQuery(hql, Employee.class).getResultList();
     }
 

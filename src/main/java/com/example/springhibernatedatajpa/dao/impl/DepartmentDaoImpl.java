@@ -16,7 +16,7 @@ public class DepartmentDaoImpl implements IDepartmentDao {
 
     @Override
     public List<Department> findAll() {
-        String hql = "SELECT d FROM Department d";
+        String hql = "SELECT d FROM Department d order by d.createdAt";
         return entityManager.createQuery(hql, Department.class).getResultList();
     }
 

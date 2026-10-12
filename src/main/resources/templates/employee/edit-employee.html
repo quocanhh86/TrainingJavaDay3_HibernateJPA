@@ -22,13 +22,9 @@
 
     <div class="card card-add-employee">
         <h3 class="card-title">Cập nhật thông tin nhân viên</h3>
-        <form th:action="@{/employee/update}" enctype="multipart/form-data" th:object="${employeeDto}" th:method="post" class="app-form" novalidate>
-            <!-- ID ẩn của nhân viên -->
+        <form th:action="@{/employee/edit}" enctype="multipart/form-data" th:object="${employeeRequest}" th:method="post" class="app-form" novalidate>
             <input type="hidden" th:field="*{id}">
-            <!-- Lưu lại avatar hiện tại nếu không chọn ảnh mới -->
             <input type="hidden" th:field="*{currentAvatar}">
-
-            <!-- Alert hiển thị lỗi nghiệp vụ từ Service nếu có -->
             <div th:replace="~{fragments/alert :: error-alert}"></div>
 
             <div class="form-grid-2">

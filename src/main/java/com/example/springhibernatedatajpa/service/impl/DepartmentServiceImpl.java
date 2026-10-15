@@ -25,7 +25,6 @@ public class DepartmentServiceImpl implements IDepartmentService {
     public List<DepartmentResponse> findAll() {
         List<Department> departments = departmentDao.findAll();
         List<DepartmentResponse> departmentDtos = new ArrayList<>();
-
         for(Department department : departments)
         {
             DepartmentResponse departmentResponse = mapToResponse(department);
@@ -44,6 +43,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         if (department == null) {
             throw new NoSuchElementException("Không tìm thấy phòng ban với ID: " + id);
         }
+
         return mapToResponse(department);
     }
 
@@ -91,6 +91,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         if (department == null) {
             throw new NoSuchElementException("Phòng ban cần xóa không tồn tại!");
         }
+
         departmentDao.delete(id);
     }
 

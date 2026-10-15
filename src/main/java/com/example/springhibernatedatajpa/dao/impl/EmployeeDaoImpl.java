@@ -4,6 +4,7 @@ import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.entity.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,4 +40,6 @@ public class EmployeeDaoImpl implements IEmployeeDao {
     public void deleteEmployee(UUID id) {
         entityManager.remove(getEmployee(id));
     }
+
+
 }

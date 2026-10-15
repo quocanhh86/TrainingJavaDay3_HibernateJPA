@@ -3,13 +3,12 @@ package com.example.springhibernatedatajpa.entity;
 import com.example.springhibernatedatajpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "employee")
-public class Employee extends BaseEntity implements Serializable {
+public class Employee extends BaseEntity implements Serializable, UserDetails {
 
     @Column(name = "first_name")
     private String firstName;
@@ -29,8 +28,11 @@ public class Employee extends BaseEntity implements Serializable {
     @Column(name = "age")
     private Integer age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -53,4 +55,14 @@ public class Employee extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "teamLead", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Project> leadingProjects = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

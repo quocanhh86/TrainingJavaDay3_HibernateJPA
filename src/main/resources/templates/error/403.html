@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{error.403.page_title}"></title>
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth-error.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="error-wrapper">
+    <div class="error-card">
+        <div class="error-badge-icon error-badge-403">🚫</div>
+        <div class="error-status-code code-403">403</div>
+        <h1 class="error-title" th:text="#{error.403.title}"></h1>
+        <p class="error-desc" th:text="#{error.403.desc}"></p>
+
+        <div th:if="${businessError != null}" class="error-detail-box" th:text="${businessError}"></div>
+
+        <div class="error-actions">
+            <a th:href="@{/}" class="btn-error-primary">
+                <span>🏠</span> <span th:text="#{common.btn.home}"></span>
+            </a>
+            <a th:href="@{/employee}" class="btn-error-secondary">
+                <span>👥</span> <span th:text="#{error.403.btn.employees}"></span>
+            </a>
+            <a th:href="@{/login}" class="btn-error-secondary">
+                <span>🔄</span> <span th:text="#{error.403.btn.switch_account}"></span>
+            </a>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

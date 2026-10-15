@@ -1,15 +1,19 @@
 package com.example.springhibernatedatajpa.config;
 
 import com.example.springhibernatedatajpa.common.enums.Status;
+import com.example.springhibernatedatajpa.dao.IAuthenticationDao;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.dao.IProjectDao;
 import com.example.springhibernatedatajpa.entity.Department;
 import com.example.springhibernatedatajpa.entity.Employee;
 import com.example.springhibernatedatajpa.entity.Project;
+import com.example.springhibernatedatajpa.entity.UserAdmin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +30,22 @@ public class DataInitializer implements CommandLineRunner {
     private final IDepartmentDao departmentDao;
     private final IEmployeeDao employeeDao;
     private final IProjectDao projectDao;
+    private final IAuthenticationDao authenticationDao;
+    private final PasswordEncoder passwordEncoder;
+
+    @Value("${super.admin.email}")
+    private String superAdminEmail;
+
+    @Value("${super.admin.password}")
+    private String superAdminPassword;
 
     @Override
     @Transactional
     public void run(String... args) {
-        // Kiểm tra nếu dữ liệu đã tồn tại đầy đủ thì bỏ qua
+        // 1. Khởi tạo tài khoản Super Admin nếu chưa tồn tại hoặc đồng bộ mật khẩu
+        initSuperAdmin();
+
+        // 2. Kiểm tra nếu dữ liệu mẫu đã tồn tại đầy đủ thì bỏ qua
         List<Department> existingDepts = departmentDao.findAll();
         List<Project> existingProjects = projectDao.findAll();
         List<Employee> existingEmployees = employeeDao.getEmployees();
@@ -331,5 +346,28 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         log.info("Khởi tạo dữ liệu mẫu thành công: 5 Departments, 10 Employees, 10 Projects (đầy đủ quan hệ liên kết TeamLead, Employees, Department, Contract và Status).");
+    }
+
+    private void initSuperAdmin() {
+        if (superAdminEmail != null && !superAdminEmail.isBlank()) {
+            UserAdmin existingAdmin = authenticationDao.findByEmail(superAdminEmail);
+            if (existingAdmin == null) {
+                UserAdmin superAdmin = UserAdmin.builder()
+                        .email(superAdminEmail)
+                        .password(passwordEncoder.encode(superAdminPassword))
+                        .fullName("Super Administrator")
+                        .build();
+                superAdmin.setStatus(Status.ACTIVE);
+                authenticationDao.addUser(superAdmin);
+                log.info("Khởi tạo tài khoản Super Admin thành công với email: {}", superAdminEmail);
+            } else {
+                if (!passwordEncoder.matches(superAdminPassword, existingAdmin.getPassword())) {
+                    existingAdmin.setPassword(passwordEncoder.encode(superAdminPassword));
+                    log.info("Đã đồng bộ lại mật khẩu BCrypt cho Super Admin theo application.properties");
+                } else {
+                    log.info("Tài khoản Super Admin đã sẵn sàng: {}", superAdminEmail);
+                }
+            }
+        }
     }
 }

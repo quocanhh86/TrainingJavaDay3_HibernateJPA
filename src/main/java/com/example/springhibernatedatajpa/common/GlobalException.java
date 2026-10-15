@@ -23,7 +23,8 @@ public class GlobalException {
     @ExceptionHandler({
             IllegalArgumentException.class,
             IllegalStateException.class,
-            NoSuchElementException.class
+            NoSuchElementException.class,
+            DuplicateResourceException.class
     })
     public String handleBusinessException(RuntimeException ex,
                                           HttpServletRequest request,

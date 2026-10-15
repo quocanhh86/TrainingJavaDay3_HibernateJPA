@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{maintenance.page_title}"></title>
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth-error.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="error-wrapper">
+    <div class="error-card">
+        <div class="error-badge-icon error-badge-maintain">🛠️</div>
+        <div class="maintenance-timer">
+            <span>⏱️</span> <span th:text="#{maintenance.timer}"></span>
+        </div>
+        <div class="error-status-code code-maintain" th:text="#{maintenance.badge}"></div>
+        <h1 class="error-title" th:text="#{maintenance.title}"></h1>
+        <p class="error-desc" th:text="#{maintenance.desc}"></p>
+
+        <div class="error-actions">
+            <button type="button" onclick="window.location.reload();" class="btn-error-primary">
+                <span>🔄</span> <span th:text="#{maintenance.btn.retry}"></span>
+            </button>
+            <a th:href="@{/}" class="btn-error-secondary">
+                <span>🏠</span> <span th:text="#{common.btn.home}"></span>
+            </a>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

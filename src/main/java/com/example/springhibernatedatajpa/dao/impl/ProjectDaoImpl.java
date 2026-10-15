@@ -33,7 +33,6 @@ public class ProjectDaoImpl implements IProjectDao {
                 "WHERE p.id = :id";
         List<Project> list = entityManager.createQuery(hql, Project.class)
                 .setParameter("id", id)
-                .setParameter("id", id)
                 .getResultList();
         return list.isEmpty() ? null : list.get(0);
     }

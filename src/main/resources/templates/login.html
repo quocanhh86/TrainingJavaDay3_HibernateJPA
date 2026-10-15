@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{login.page_title}"></title>
+    <link rel="stylesheet" th:href="@{/css/fragments/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth-error.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo-badge">🏢</div>
+            <h1 class="auth-title" th:text="#{login.title}"></h1>
+            <p class="auth-subtitle" th:text="#{login.subtitle}"></p>
+        </div>
+
+        <!-- Thông báo lỗi khi đăng nhập thất bại -->
+        <div th:if="${param.error}" class="auth-alert alert-error">
+            <span class="auth-alert-icon">⚠️</span>
+            <div>
+                <strong th:text="#{login.error.title}"></strong><br>
+                <span th:text="#{login.error.desc}"></span>
+            </div>
+        </div>
+
+        <!-- Thông báo khi đăng xuất thành công -->
+        <div th:if="${param.logout}" class="auth-alert alert-success">
+            <span class="auth-alert-icon">✅</span>
+            <div th:text="#{login.logout.success}"></div>
+        </div>
+
+        <!-- Thông báo lỗi nghiệp vụ (nếu có từ redirect flash attribute) -->
+        <div th:if="${businessError != null}" class="auth-alert alert-error">
+            <span class="auth-alert-icon">⚠️</span>
+            <div th:text="${businessError}"></div>
+        </div>
+
+        <form th:action="@{/login}" method="post" class="auth-form">
+            <div class="auth-form-group">
+                <label for="username" class="auth-label" th:text="#{login.email}"></label>
+                <div class="auth-input-wrapper">
+                    <input type="email"
+                           id="username"
+                           name="username"
+                           class="auth-input"
+                           th:placeholder="#{login.email.placeholder}"
+                           required
+                           autofocus>
+                </div>
+            </div>
+
+            <div class="auth-form-group">
+                <label for="password" class="auth-label" th:text="#{login.password}"></label>
+                <div class="auth-input-wrapper">
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           class="auth-input"
+                           th:placeholder="#{login.password.placeholder}"
+                           required>
+                </div>
+            </div>
+
+            <div class="auth-checkbox-group">
+                <label class="auth-checkbox-label">
+                    <input type="checkbox" name="remember-me" id="remember-me">
+                    <span th:text="#{login.remember_me}"></span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-auth-submit" th:text="#{login.btn.submit}"></button>
+        </form>
+
+        <div class="auth-footer">
+            <p style="margin-bottom: 0.5rem;"><a th:href="@{/register}" th:text="#{login.link.register}"></a></p>
+            <p><a th:href="@{/}" th:text="#{common.back_home}"></a></p>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

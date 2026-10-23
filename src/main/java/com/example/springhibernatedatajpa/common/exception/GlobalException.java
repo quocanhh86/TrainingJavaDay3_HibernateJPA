@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.common;
+package com.example.springhibernatedatajpa.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +29,7 @@ public class GlobalException {
     public String handleBusinessException(RuntimeException ex,
                                           HttpServletRequest request,
                                           RedirectAttributes redirectAttributes) {
-        log.warn("Lỗi nghiệp vụ: {}", ex.getMessage());
         redirectAttributes.addFlashAttribute("businessError", ex.getMessage());
-
         String referer = request.getHeader("Referer");
         if (referer != null && !referer.isBlank()) {
             return "redirect:" + referer;

@@ -3,6 +3,7 @@ package com.example.springhibernatedatajpa.entity;
 import com.example.springhibernatedatajpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,9 @@ public class Employee extends BaseEntity implements Serializable, UserDetails {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "must_change_password")
+    private Boolean mustChangePassword;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
@@ -57,11 +61,13 @@ public class Employee extends BaseEntity implements Serializable, UserDetails {
     private List<Project> leadingProjects = new ArrayList<>();
 
     @Override
+    @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
     }
 
     @Override
+    @NullMarked
     public String getUsername() {
         return email;
     }

@@ -1,6 +1,6 @@
 package com.example.springhibernatedatajpa.service.impl;
 
-import com.example.springhibernatedatajpa.common.DuplicateResourceException;
+import com.example.springhibernatedatajpa.common.exception.DuplicateResourceException;
 import com.example.springhibernatedatajpa.dao.IAuthenticationDao;
 import com.example.springhibernatedatajpa.entity.Employee;
 import com.example.springhibernatedatajpa.entity.UserAdmin;

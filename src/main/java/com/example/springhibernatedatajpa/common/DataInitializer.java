@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.config;
+package com.example.springhibernatedatajpa.common;
 
 import com.example.springhibernatedatajpa.common.enums.Status;
 import com.example.springhibernatedatajpa.dao.IAuthenticationDao;

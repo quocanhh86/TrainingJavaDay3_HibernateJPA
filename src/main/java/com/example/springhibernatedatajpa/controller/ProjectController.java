@@ -1,6 +1,7 @@
 package com.example.springhibernatedatajpa.controller;
 
-import com.example.springhibernatedatajpa.common.service.IFileService;
+import com.example.springhibernatedatajpa.infrastructure.constant.PathManagerConstant;
+import com.example.springhibernatedatajpa.infrastructure.service.IFileService;
 import com.example.springhibernatedatajpa.model.response.ProjectResponse;
 import com.example.springhibernatedatajpa.service.IProjectService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/project")
+@RequestMapping(PathManagerConstant.MANAGER_PREFIX)
 public class ProjectController {
 
     private final IProjectService projectService;

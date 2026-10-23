@@ -4,8 +4,7 @@ import com.example.springhibernatedatajpa.entity.Employee;
 import com.example.springhibernatedatajpa.entity.UserAdmin;
 
 public interface IAuthenticationDao {
-    UserAdmin findByEmail(String email);
-    void addUser(UserAdmin userAdmin);
-    void addEmployee(Employee employee);
+    UserAdmin getAdminByEmail(String email);
+    void employeeRegister(Employee employee);
     Employee getEmployeeByEmail(String email);
 }

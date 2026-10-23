@@ -1,6 +1,6 @@
 package com.example.springhibernatedatajpa.model.response;
 
-import com.example.springhibernatedatajpa.common.enums.Status;
+import com.example.springhibernatedatajpa.infrastructure.enums.Status;
 import com.example.springhibernatedatajpa.entity.Employee;
 import lombok.*;
 

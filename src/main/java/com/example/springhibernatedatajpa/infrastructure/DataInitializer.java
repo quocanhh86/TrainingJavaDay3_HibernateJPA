@@ -1,6 +1,6 @@
-package com.example.springhibernatedatajpa.common;
+package com.example.springhibernatedatajpa.infrastructure;
 
-import com.example.springhibernatedatajpa.common.enums.Status;
+import com.example.springhibernatedatajpa.infrastructure.enums.Status;
 import com.example.springhibernatedatajpa.dao.IAuthenticationDao;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -97,7 +98,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empAn = Employee.builder()
                 .firstName("Nguyễn Văn")
                 .lastName("An")
-                .age(28)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1998, 5, 15).atStartOfDay()))
                 .email("an.nguyen@company.com")
                 .phoneNumber("0912345671")
                 .address("Hà Nội")
@@ -108,7 +109,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empBich = Employee.builder()
                 .firstName("Trần Thị")
                 .lastName("Bích")
-                .age(25)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(2001, 8, 20).atStartOfDay()))
                 .email("bich.tran@company.com")
                 .phoneNumber("0912345672")
                 .address("Đà Nẵng")
@@ -119,7 +120,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empCuong = Employee.builder()
                 .firstName("Lê Hoàng")
                 .lastName("Cường")
-                .age(32)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1994, 3, 12).atStartOfDay()))
                 .email("cuong.le@company.com")
                 .phoneNumber("0912345673")
                 .address("TP. Hồ Chí Minh")
@@ -130,7 +131,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empDung = Employee.builder()
                 .firstName("Phạm Thị")
                 .lastName("Dung")
-                .age(29)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1997, 11, 5).atStartOfDay()))
                 .email("dung.pham@company.com")
                 .phoneNumber("0912345674")
                 .address("Hải Phòng")
@@ -141,7 +142,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empDuc = Employee.builder()
                 .firstName("Hoàng Minh")
                 .lastName("Đức")
-                .age(27)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1999, 7, 22).atStartOfDay()))
                 .email("duc.hoang@company.com")
                 .phoneNumber("0912345675")
                 .address("Cần Thơ")
@@ -152,7 +153,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empGiang = Employee.builder()
                 .firstName("Vũ Thị")
                 .lastName("Giang")
-                .age(24)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(2002, 9, 18).atStartOfDay()))
                 .email("giang.vu@company.com")
                 .phoneNumber("0912345676")
                 .address("Bắc Ninh")
@@ -163,7 +164,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empHuy = Employee.builder()
                 .firstName("Đặng Quốc")
                 .lastName("Huy")
-                .age(35)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1991, 1, 30).atStartOfDay()))
                 .email("huy.dang@company.com")
                 .phoneNumber("0912345677")
                 .address("Quảng Ninh")
@@ -174,7 +175,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empHang = Employee.builder()
                 .firstName("Bùi Thu")
                 .lastName("Hằng")
-                .age(26)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(2000, 12, 10).atStartOfDay()))
                 .email("hang.bui@company.com")
                 .phoneNumber("0912345678")
                 .address("Thừa Thiên Huế")
@@ -185,7 +186,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empKhai = Employee.builder()
                 .firstName("Ngô Quang")
                 .lastName("Khải")
-                .age(31)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(1995, 4, 25).atStartOfDay()))
                 .email("khai.ngo@company.com")
                 .phoneNumber("0912345679")
                 .address("Nghệ An")
@@ -196,7 +197,7 @@ public class DataInitializer implements CommandLineRunner {
         Employee empLinh = Employee.builder()
                 .firstName("Đỗ Mai")
                 .lastName("Linh")
-                .age(23)
+                .dateOfBirth(Timestamp.valueOf(LocalDate.of(2003, 6, 14).atStartOfDay()))
                 .email("linh.do@company.com")
                 .phoneNumber("0912345680")
                 .address("Thanh Hóa")
@@ -350,7 +351,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private void initSuperAdmin() {
         if (superAdminEmail != null && !superAdminEmail.isBlank()) {
-            UserAdmin existingAdmin = authenticationDao.findByEmail(superAdminEmail);
+            UserAdmin existingAdmin = authenticationDao.getAdminByEmail(superAdminEmail);
             if (existingAdmin == null) {
                 UserAdmin superAdmin = UserAdmin.builder()
                         .email(superAdminEmail)

@@ -1,7 +1,7 @@
-package com.example.springhibernatedatajpa.common.service.Impl;
+package com.example.springhibernatedatajpa.infrastructure.service.Impl;
 
-import com.example.springhibernatedatajpa.common.GlobalConfig;
-import com.example.springhibernatedatajpa.common.service.IFileService;
+import com.example.springhibernatedatajpa.infrastructure.GlobalConfig;
+import com.example.springhibernatedatajpa.infrastructure.service.IFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

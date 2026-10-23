@@ -1,7 +1,6 @@
 package com.example.springhibernatedatajpa.service.impl;
 
-import com.example.springhibernatedatajpa.common.GlobalConfig;
-import com.example.springhibernatedatajpa.common.service.IFileService;
+import com.example.springhibernatedatajpa.infrastructure.service.IFileService;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.entity.Department;
@@ -13,15 +12,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service

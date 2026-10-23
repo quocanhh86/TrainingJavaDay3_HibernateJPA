@@ -1,6 +1,6 @@
 package com.example.springhibernatedatajpa.service.impl;
 
-import com.example.springhibernatedatajpa.common.service.IFileService;
+import com.example.springhibernatedatajpa.infrastructure.service.IFileService;
 import com.example.springhibernatedatajpa.dao.IDepartmentDao;
 import com.example.springhibernatedatajpa.dao.IEmployeeDao;
 import com.example.springhibernatedatajpa.dao.IProjectDao;

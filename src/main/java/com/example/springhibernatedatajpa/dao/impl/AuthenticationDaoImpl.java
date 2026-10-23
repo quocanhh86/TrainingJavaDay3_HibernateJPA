@@ -17,7 +17,7 @@ public class AuthenticationDaoImpl implements IAuthenticationDao {
     private EntityManager entityManager;
 
     @Override
-    public UserAdmin findByEmail(String email) {
+    public UserAdmin getAdminByEmail(String email) {
         String hql = "select u from UserAdmin u where u.email = :email";
         TypedQuery<UserAdmin> query = entityManager.createQuery(hql, UserAdmin.class);
         query.setParameter("email", email);
@@ -27,12 +27,7 @@ public class AuthenticationDaoImpl implements IAuthenticationDao {
     }
 
     @Override
-    public void addUser(UserAdmin userAdmin) {
-        entityManager.persist(userAdmin);
-    }
-
-    @Override
-    public void addEmployee(Employee employee) {
+    public void employeeRegister(Employee employee) {
         entityManager.persist(employee);
     }
 

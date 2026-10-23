@@ -36,6 +36,8 @@ public class SecurityConfig {
                                 "/favicon.ico"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/department-manager/**").hasRole("MANAGER")
+                        .requestMatchers("/employees/**").hasRole("EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form ->
@@ -63,6 +65,7 @@ public class SecurityConfig {
     public static RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.withDefaultRolePrefix()
                 .role("ADMIN").implies("EMPLOYEE")
+                .role("ADMIN").implies("MANAGER")
                 .build();
     }
  }

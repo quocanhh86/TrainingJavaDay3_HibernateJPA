@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.common.service;
+package com.example.springhibernatedatajpa.infrastructure.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

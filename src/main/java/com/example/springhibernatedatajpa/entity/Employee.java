@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.*;
 
 @NoArgsConstructor
@@ -26,8 +27,8 @@ public class Employee extends BaseEntity implements Serializable, UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "date_of_birth")
+    private Timestamp dateOfBirth;
 
     @Column(name = "email", unique = true)
     private String email;

@@ -1,6 +1,6 @@
-package com.example.springhibernatedatajpa.common.service.Impl;
+package com.example.springhibernatedatajpa.infrastructure.service.Impl;
 
-import com.example.springhibernatedatajpa.common.service.IEmailService;
+import com.example.springhibernatedatajpa.infrastructure.service.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Slf4j
 @Service

@@ -1,5 +1,6 @@
 package com.example.springhibernatedatajpa.controller;
 
+import com.example.springhibernatedatajpa.infrastructure.constant.PathManagerConstant;
 import com.example.springhibernatedatajpa.model.request.DepartmentRequest;
 import com.example.springhibernatedatajpa.model.response.DepartmentResponse;
 import com.example.springhibernatedatajpa.service.IDepartmentService;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/department")
+@RequestMapping(PathManagerConstant.MANAGER_PREFIX)
 public class DepartmentController {
     private final IDepartmentService departmentService;
 

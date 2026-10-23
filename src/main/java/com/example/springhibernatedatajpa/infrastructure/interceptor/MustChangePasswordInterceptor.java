@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.common.interceptor;
+package com.example.springhibernatedatajpa.infrastructure.interceptor;
 
 import com.example.springhibernatedatajpa.entity.Employee;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,8 +1,8 @@
 package com.example.springhibernatedatajpa.config;
 
-import com.example.springhibernatedatajpa.common.GlobalConfig;
-import com.example.springhibernatedatajpa.common.interceptor.MustChangePasswordInterceptor;
-import com.example.springhibernatedatajpa.common.interceptor.RequestLogInterceptor;
+import com.example.springhibernatedatajpa.infrastructure.GlobalConfig;
+import com.example.springhibernatedatajpa.infrastructure.interceptor.MustChangePasswordInterceptor;
+import com.example.springhibernatedatajpa.infrastructure.interceptor.RequestLogInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -1,6 +1,6 @@
 package com.example.springhibernatedatajpa.service.impl;
 
-import com.example.springhibernatedatajpa.common.exception.DuplicateResourceException;
+import com.example.springhibernatedatajpa.infrastructure.exception.DuplicateResourceException;
 import com.example.springhibernatedatajpa.dao.IAuthenticationDao;
 import com.example.springhibernatedatajpa.entity.Employee;
 import com.example.springhibernatedatajpa.entity.UserAdmin;
@@ -19,8 +19,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void addEmployee(RegisterRequest registerRequest) {
-        UserAdmin userAdminExist = authenticationDao.findByEmail(registerRequest.getEmail());
+    public void registerEmployee(RegisterRequest registerRequest) {
+        UserAdmin userAdminExist = authenticationDao.getAdminByEmail(registerRequest.getEmail());
         if (userAdminExist != null) {
             throw new DuplicateResourceException("Tài khoản đã tồn tại trong hệ thống, vui lòng đăng nhập!");
         }
@@ -36,6 +36,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .email(registerRequest.getEmail().trim())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .build();
-        authenticationDao.addEmployee(employee);
+        authenticationDao.employeeRegister(employee);
     }
 }

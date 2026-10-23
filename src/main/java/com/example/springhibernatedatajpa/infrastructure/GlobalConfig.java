@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.common;
+package com.example.springhibernatedatajpa.infrastructure;
 
 public class GlobalConfig {
     public static final String folderPath = "src/main/resources/static/img";

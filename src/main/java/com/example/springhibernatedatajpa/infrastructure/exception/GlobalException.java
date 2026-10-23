@@ -1,4 +1,4 @@
-package com.example.springhibernatedatajpa.common.exception;
+package com.example.springhibernatedatajpa.infrastructure.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

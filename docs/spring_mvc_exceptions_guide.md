@@ -266,7 +266,7 @@ Nhúng fragment này vào file layout hoặc header dùng chung (`fragments/head
 Đặt tại `src/main/java/.../common/GlobalException.java`:
 
 ```java
-package com.example.springhibernatedatajpa.common;
+package com.example.springhibernatedatajpa.infrastructure;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -279,54 +279,47 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 @Slf4j
 public class GlobalException {
-
-    /**
-     * Bắt các lỗi nghiệp vụ chung cho 100+ màn hình:
-     * - Tham số sai (IllegalArgumentException)
-     * - Trạng thái sai / trùng lặp (IllegalStateException)
-     * - Không tìm thấy dữ liệu (NoSuchElementException)
-     */
-    @ExceptionHandler({
-        IllegalArgumentException.class,
-        IllegalStateException.class,
-        NoSuchElementException.class
-    })
-    public String handleBusinessException(RuntimeException ex,
-                                          HttpServletRequest request,
-                                          RedirectAttributes redirectAttributes) {
-        log.warn("Ngoại lệ nghiệp vụ: {}", ex.getMessage());
-
-        // 1. Gán message lỗi vào FlashAttribute (sống qua 1 lần redirect)
-        redirectAttributes.addFlashAttribute("businessError", ex.getMessage());
-
-        // 2. Lấy URL của màn hình mà người dùng vừa đứng thao tác
-        String referer = request.getHeader("Referer");
-
-        // 3. Tự động quay về đúng màn hình đó!
-        if (referer != null && !referer.isBlank()) {
-            return "redirect:" + referer;
-        }
-
-        // Dự phòng: Nếu người dùng truy cập trực tiếp không có referer thì về trang chủ
-        return "redirect:/";
-    }
-
-    /**
-     * Bắt các lỗi hệ thống không mong muốn (500 Server Error)
-     */
-    @ExceptionHandler(Exception.class)
-    public String handleGeneralException(Exception ex,
+   @ExceptionHandler({
+           IllegalArgumentException.class,
+           IllegalStateException.class,
+           NoSuchElementException.class
+   })
+   public String handleBusinessException(RuntimeException ex,
                                          HttpServletRequest request,
                                          RedirectAttributes redirectAttributes) {
-        log.error("Lỗi hệ thống chưa phân loại: ", ex);
-        redirectAttributes.addFlashAttribute("businessError", "Lỗi hệ thống: " + ex.getMessage());
+      log.warn("Ngoại lệ nghiệp vụ: {}", ex.getMessage());
 
-        String referer = request.getHeader("Referer");
-        if (referer != null && !referer.isBlank()) {
-            return "redirect:" + referer;
-        }
-        return "redirect:/";
-    }
+      // 1. Gán message lỗi vào FlashAttribute (sống qua 1 lần redirect)
+      redirectAttributes.addFlashAttribute("businessError", ex.getMessage());
+
+      // 2. Lấy URL của màn hình mà người dùng vừa đứng thao tác
+      String referer = request.getHeader("Referer");
+
+      // 3. Tự động quay về đúng màn hình đó!
+      if (referer != null && !referer.isBlank()) {
+         return "redirect:" + referer;
+      }
+
+      // Dự phòng: Nếu người dùng truy cập trực tiếp không có referer thì về trang chủ
+      return "redirect:/";
+   }
+
+   /**
+    * Bắt các lỗi hệ thống không mong muốn (500 Server Error)
+    */
+   @ExceptionHandler(Exception.class)
+   public String handleGeneralException(Exception ex,
+                                        HttpServletRequest request,
+                                        RedirectAttributes redirectAttributes) {
+      log.error("Lỗi hệ thống chưa phân loại: ", ex);
+      redirectAttributes.addFlashAttribute("businessError", "Lỗi hệ thống: " + ex.getMessage());
+
+      String referer = request.getHeader("Referer");
+      if (referer != null && !referer.isBlank()) {
+         return "redirect:" + referer;
+      }
+      return "redirect:/";
+   }
 }
 ```
 
